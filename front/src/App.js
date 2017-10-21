@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button } from 'react-bootstrap';
 import './App.scss';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SearchResults from './search';
 import Home from './home';
 
 class App extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
       return (
@@ -21,6 +16,7 @@ class App extends Component {
           </Router>
       );
     }
+
 }
 
 export default App;

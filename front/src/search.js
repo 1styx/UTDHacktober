@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import zip from './util';
 
 export default class SearchResults extends Component {
@@ -41,14 +40,14 @@ export default class SearchResults extends Component {
             }
         );
         */
-        this.state.zippedResults = [[{name: 'aliproduct1'}, {name: 'amaproduct1'}], 
-            [{name: 'aliproduct2'}, {name: 'amaproduct2'}], 
+        this.state.zippedResults = [[{name: 'aliproduct1'}, {name: 'amaproduct1'}],
+            [{name: 'aliproduct2'}, {name: 'amaproduct2'}],
             [{name: 'aliproduct3'}, {name: 'amaproduct3'}]];
-        
+
         this.createProductCard = this.createProductCard.bind(this);
         this.createProductRow = this.createProductRow.bind(this);
     }
-    
+
     createProductCard(product) {
         if (product == null) {
             return (
