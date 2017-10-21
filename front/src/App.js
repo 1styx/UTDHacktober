@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import './App.scss';
 
 const navbarInstance = (
   <Navbar inverse collapseOnSelect>
