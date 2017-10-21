@@ -57,12 +57,11 @@ class App extends Component {
         super(props);
 
         this.state = {users: []};
-    }
-
-    componentDidMount() {
-      fetch('/users')
-        .then(res => res.json())
-        .then(users => this.setState({ users }));
+        /*
+        fetch('/users')
+            .then(res => res.json())
+            .then(users => this.setState({ users }));
+            */
     }
 
     render() {
