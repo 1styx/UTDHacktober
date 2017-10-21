@@ -30,7 +30,6 @@ const navbarInstance = (
   </Navbar>
 );
 
-
 class Home extends Component {
 
     constructor(props) {
