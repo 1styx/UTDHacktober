@@ -5,8 +5,8 @@ var amazon = require('amazon-product-api');
 
 // Establish Amazon search abilities
 var client = amazon.createClient({
-    awsId: '458975845588',
-    awsSecret: 'AKIAJN7CA6ZATVUPV4DAHU8T7HunfVTy0uTDpzWRdxMCjOi',
+    awsId: 'AKIAIKMUVUJEGNAADWTQ',
+    awsSecret: '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',
     awsTag: 'evwilson-20'
 });
 
@@ -14,22 +14,23 @@ var client = amazon.createClient({
 router.get('/', function(req, res, next) {
     console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
 
-    /*
     client.itemSearch({
-        director: 'Quentin Tarantino',
-        actor: 'Samuel L. Jackson',
-        searchIndex: 'DVD',
-        audienceRating: 'R',
-        responseGroup: 'ItemAttributes,Offers,Images'
+        searchIndex: 'All',
+        keywords: req.query.search,
+        itemPage: 1
     })
     .then(function(results) {
+        console.log('In Amazon query success');
         console.log(results);
-        res.send('Success');
     })
     .catch(function(err) {
+        console.log('In Amazon query failure');
         console.log(err);
+        err.Error.forEach(function(error) {
+            console.log(error);
+        });
     });
-    */
+
 });
 
 module.exports = router;
