@@ -1,12 +1,13 @@
+
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button } from 'react-bootstrap';
 import './App.scss';
 
 const navbarInstance = (
   <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">DropSHipping Comparator</a>
+        <a href="#">DropShipping Comparator</a>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
@@ -26,6 +27,26 @@ const navbarInstance = (
         <NavItem eventKey={1} href="#">Link Right</NavItem>
         <NavItem eventKey={2} href="#">Link Right</NavItem>
       </Nav>
+    </Navbar.Collapse>
+  </Navbar>
+);
+
+const searchbarInstance = (
+  <Navbar>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#">Enter Item</a>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
+      <Navbar.Form pullLeft>
+        <FormGroup>
+          <FormControl type="text" placeholder="Search" />
+        </FormGroup>
+        {' '}
+        <Button type="submit">Submit</Button>
+      </Navbar.Form>
     </Navbar.Collapse>
   </Navbar>
 );
@@ -52,6 +73,7 @@ class App extends Component {
           {this.state.users.map(user =>
             <div key={user.id}>{user.username}</div>
           )}
+          {searchbarInstance}
         </div>
       );
     }
