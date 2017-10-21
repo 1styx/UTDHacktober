@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  state = {users: []}
+    constructor() {
+        state = {users: []};
+    }
 
     componentDidMount() {
       fetch('/users')
