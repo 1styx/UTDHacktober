@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import './App.scss';
 import axios from 'axios';
 
@@ -7,25 +7,18 @@ const navbarInstance = (
   <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">DropShipping Comparator</a>
+        <a href="/">DropShipping Comparator</a>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
       <Nav>
-        <NavItem eventKey={1} href="#">Link</NavItem>
-        <NavItem eventKey={2} href="#">Link</NavItem>
-        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>Action</MenuItem>
-          <MenuItem eventKey={3.2}>Another action</MenuItem>
-          <MenuItem eventKey={3.3}>Something else here</MenuItem>
-          <MenuItem divider />
-          <MenuItem eventKey={3.3}>Separated link</MenuItem>
-        </NavDropdown>
+        <NavItem eventKey={1} href="/">Link</NavItem>
+        <NavItem eventKey={2} href="/">Link</NavItem>
       </Nav>
       <Nav pullRight>
-        <NavItem eventKey={1} href="#">Link Right</NavItem>
-        <NavItem eventKey={2} href="#">Link Right</NavItem>
+        <NavItem eventKey={1} href="/">Link Right</NavItem>
+        <NavItem eventKey={2} href="/">Link Right</NavItem>
       </Nav>
     </Navbar.Collapse>
   </Navbar>
@@ -40,9 +33,6 @@ class Home extends Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
 
-      fetch('/users')
-          .then(res => res.json())
-          .then(users => this.setState({ users }));
     }
 
     handleSubmit(event) {
