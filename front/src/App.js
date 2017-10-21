@@ -31,8 +31,11 @@ const navbarInstance = (
 );
 
 class App extends Component {
-    constructor() {
-        state = {users: []};
+
+    constructor(props) {
+        super(props);
+
+        this.state = {users: []};
     }
 
     componentDidMount() {
