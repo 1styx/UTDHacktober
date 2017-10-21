@@ -44,6 +44,7 @@ export default class SearchResults extends Component {
             [{name: 'aliproduct2'}, {name: 'amaproduct2'}],
             [{name: 'aliproduct3'}, {name: 'amaproduct3'}]]};
 
+        this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
         this.createProductCard = this.createProductCard.bind(this);
         this.createProductRow = this.createProductRow.bind(this);
     }
@@ -67,17 +68,31 @@ export default class SearchResults extends Component {
         }
     }
 
-    createProductRow(curVal, index, array) {
-        return (
-            <div className='row' key={index}>
-                {this.createProductCard(curVal[0])}
+    createProductAnalysisCard(product) {
+        if (product == null) {
+            return (
+                <div className="card">
+                </div>
+            );
+        } else {
+            return (
                 <div className="card">
                     <div className="card-block">
-                        <h4 className="card-title">Spacer</h4>
+                        <h4 className="card-title">{product.name}</h4>
                         <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
+            );
+        }
+    }
+
+    createProductRow(curVal, index, array) {
+        return (
+            <div className='row' key={index}>
+                {this.createProductCard(curVal[0])}
+                {this.createProductAnalysisCard(curVal[0])}
+                {this.createProductAnalysisCard(curVal[1])}
                 {this.createProductCard(curVal[1])}
             </div>
         );
@@ -88,6 +103,15 @@ export default class SearchResults extends Component {
             <div>
                 <Navbar />
                 <div className='container'>
+                    <div className='row'>
+                        <div className="card">
+                            <div className="card-block">
+                                <h4 className="card-title">Product Info</h4>
+                                <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
                     <div className="card-deck">
                         {this.state.zippedResults.map(this.createProductRow)}
                     </div>
