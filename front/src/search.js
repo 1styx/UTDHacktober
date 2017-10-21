@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import zip from './util';
 
-class SearchResults extends Component {
+export default class SearchResults extends Component {
     constructor(props) {
         super(props);
         // props.searchQuery is the string passed to the backend call
@@ -41,13 +41,16 @@ class SearchResults extends Component {
             }
         );
         */
-        this.state.zippedResults[[{name: 'aliproduct1'}, {name: 'amaproduct1'}], 
+        this.state.zippedResults = [[{name: 'aliproduct1'}, {name: 'amaproduct1'}], 
             [{name: 'aliproduct2'}, {name: 'amaproduct2'}], 
             [{name: 'aliproduct3'}, {name: 'amaproduct3'}]];
+        
+        this.createProductCard = this.createProductCard.bind(this);
+        this.createProductRow = this.createProductRow.bind(this);
     }
     
     createProductCard(product) {
-        if (curVal[0] == null) {
+        if (product == null) {
             return (
                 <div className="card">
                 </div>
@@ -55,7 +58,6 @@ class SearchResults extends Component {
         } else {
             return (
                 <div className="card">
-                    //<img className="card-img-top" src="..." alt="Card image cap">
                     <div className="card-block">
                         <h4 className="card-title">product.name</h4>
                         <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
@@ -69,29 +71,26 @@ class SearchResults extends Component {
     createProductRow(curVal, index, array) {
         return (
             <div key={index}>
-                {createProductCard(curVal[0])}
+                {this.createProductCard(curVal[0])}
                 <div className="card">
-                    //<img className="card-img-top" src="..." alt="Card image cap">
                     <div className="card-block">
                         <h4 className="card-title">Spacer</h4>
                         <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
-                {createProductCard(curVal[1])}
+                {this.createProductCard(curVal[1])}
             </div>
         );
     }
 
     render() {
         return (
-            {
-                <div className='container'>
-                    <div className="card-deck">
-                        {this.state.zippedResults.map(this.createProductRow)}
-                    </div>
+            <div className='container'>
+                <div className="card-deck">
+                    {this.state.zippedResults.map(this.createProductRow)}
                 </div>
-            }
+            </div>
         );
     }
 }
