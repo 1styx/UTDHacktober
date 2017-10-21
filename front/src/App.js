@@ -2,81 +2,120 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, FormGroup, FormControl, Button } from 'react-bootstrap';
 import './App.scss';
+import axios from 'axios';
 
 const navbarInstance = (
-  <Navbar inverse collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">DropShipping Comparator</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <NavItem eventKey={1} href="#">Link</NavItem>
-        <NavItem eventKey={2} href="#">Link</NavItem>
-        <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>Action</MenuItem>
-          <MenuItem eventKey={3.2}>Another action</MenuItem>
-          <MenuItem eventKey={3.3}>Something else here</MenuItem>
-          <MenuItem divider />
-          <MenuItem eventKey={3.3}>Separated link</MenuItem>
-        </NavDropdown>
-      </Nav>
-      <Nav pullRight>
-        <NavItem eventKey={1} href="#">Link Right</NavItem>
-        <NavItem eventKey={2} href="#">Link Right</NavItem>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
+    <Navbar inverse collapseOnSelect>
+        <Navbar.Header>
+            <Navbar.Brand>
+                <a href="#">DropShipping Comparator</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+            <Nav>
+                <NavItem eventKey={1} href="#">Link</NavItem>
+                <NavItem eventKey={2} href="#">Link</NavItem>
+                <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
+                    <MenuItem eventKey={3.1}>Action</MenuItem>
+                    <MenuItem eventKey={3.2}>Another action</MenuItem>
+                    <MenuItem eventKey={3.3}>Something else here</MenuItem>
+                    <MenuItem divider />
+                    <MenuItem eventKey={3.3}>Separated link</MenuItem>
+                </NavDropdown>
+            </Nav>
+            <Nav pullRight>
+                <NavItem eventKey={1} href="#">Link Right</NavItem>
+                <NavItem eventKey={2} href="#">Link Right</NavItem>
+            </Nav>
+        </Navbar.Collapse>
+    </Navbar>
 );
 
 const searchbarInstance = (
-  <Navbar>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="#">Enter Item</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Navbar.Form pullLeft>
-        <FormGroup>
-          <FormControl type="text" placeholder="Search" />
-        </FormGroup>
-        {' '}
-        <Button type="submit">Submit</Button>
-      </Navbar.Form>
-    </Navbar.Collapse>
-  </Navbar>
+    <Navbar>
+        <Navbar.Header>
+            <Navbar.Brand>
+                <a href="#">Enter Item</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+        </Navbar.Header>
+        <Navbar.Collapse>
+            <Navbar.Form pullLeft>
+                <FormGroup>
+                    <FormControl type="text" placeholder="Search"/>
+                </FormGroup>
+                {' '}
+                <Button type="submit">Submit</Button>
+            </Navbar.Form>
+        </Navbar.Collapse>
+    </Navbar>
 );
 
 class App extends Component {
 
-    constructor(props) {
-        super(props);
+        constructor(props) {
+            super(props);
 
-        this.state = {users: []};
-    }
+            this.state = {users: [], search: ''};
+            this.handleSubmit = this.handleSubmit.bind(this);
+            this.handleChange = this.handleChange.bind(this);
 
-    componentDidMount() {
-      fetch('/users')
-        .then(res => res.json())
-        .then(users => this.setState({ users }));
-    }
+            fetch('/users')
+                .then(res => res.json())
+                .then(users => this.setState({ users }));
+        }
 
-    render() {
-      return (
-        <div className="App">
-          {navbarInstance}
-          <h1>Users</h1>
-          {this.state.users.map(user =>
-            <div key={user.id}>{user.username}</div>
-          )}
-          {searchbarInstance}
-        </div>
-      );
-    }
+        handleSubmit(event) {
+
+            console.log("Search value: " + this.state.search);
+            console.log(JSON.stringify(this.state));
+
+            axios.get('/amazonSearch', {
+                params: {
+                    search: this.state.search
+                }
+            })
+                .then(function(response) {
+                    console.log(response);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+
+            event.preventDefault();
+        }
+
+        handleChange(event) {
+            this.setState({
+                [event.target.name]: event.target.value
+            });
+            console.log(this.state.search);
+        }
+
+        render() {
+            return (
+                <div className="App">
+                    {navbarInstance}
+                    <h1>Users</h1>
+                    {this.state.users.map(user =>
+                        <div key={user.id}>{user.username}</div>
+                    )}
+                    {this.state.search}
+
+                    <form>
+                        <div id='searchDiv' className={'inputField'}>
+                            <input type='text' id='search' name='search' placeholder='Search for your item here...' onChange={this.handleChange}/>
+                        </div>
+
+                        <div id='submitDiv' className={'inputField'}>
+                            <input id='submit' type='submit' value='Submit' onClick={this.handleSubmit}/>
+                        </div>
+                    </form>
+
+                </div>
+            );
+        }
 }
 
 export default App;
