@@ -10,7 +10,6 @@ export default class Home extends Component {
 
         this.state = {search: ''};
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
     handleSubmit(event) {
