@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import zip from './util';
+import Navbar from './navbar';
 
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
         // props.searchQuery is the string passed to the backend call
-        this.state = {};
         /*
         axios.get('/aliProduct', {
                 params: {
@@ -40,9 +40,9 @@ export default class SearchResults extends Component {
             }
         );
         */
-        this.state.zippedResults = [[{name: 'aliproduct1'}, {name: 'amaproduct1'}],
+        this.state = {zippedResults: [[{name: 'aliproduct1'}, {name: 'amaproduct1'}],
             [{name: 'aliproduct2'}, {name: 'amaproduct2'}],
-            [{name: 'aliproduct3'}, {name: 'amaproduct3'}]];
+            [{name: 'aliproduct3'}, {name: 'amaproduct3'}]]};
 
         this.createProductCard = this.createProductCard.bind(this);
         this.createProductRow = this.createProductRow.bind(this);
@@ -58,7 +58,7 @@ export default class SearchResults extends Component {
             return (
                 <div className="card">
                     <div className="card-block">
-                        <h4 className="card-title">product.name</h4>
+                        <h4 className="card-title">{product.name}</h4>
                         <p className="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
                     </div>
@@ -69,7 +69,7 @@ export default class SearchResults extends Component {
 
     createProductRow(curVal, index, array) {
         return (
-            <div key={index}>
+            <div className='row' key={index}>
                 {this.createProductCard(curVal[0])}
                 <div className="card">
                     <div className="card-block">
@@ -85,9 +85,12 @@ export default class SearchResults extends Component {
 
     render() {
         return (
-            <div className='container'>
-                <div className="card-deck">
-                    {this.state.zippedResults.map(this.createProductRow)}
+            <div>
+                <Navbar />
+                <div className='container'>
+                    <div className="card-deck">
+                        {this.state.zippedResults.map(this.createProductRow)}
+                    </div>
                 </div>
             </div>
         );

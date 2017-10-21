@@ -1,38 +1,16 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import Navbar from './navbar';
 import './App.scss';
 import axios from 'axios';
 
-const navbarInstance = (
-  <Navbar inverse collapseOnSelect>
-    <Navbar.Header>
-      <Navbar.Brand>
-        <a href="/">DropShipping Comparator</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <NavItem eventKey={1} href="/">Link</NavItem>
-        <NavItem eventKey={2} href="/">Link</NavItem>
-      </Nav>
-      <Nav pullRight>
-        <NavItem eventKey={1} href="/">Link Right</NavItem>
-        <NavItem eventKey={2} href="/">Link Right</NavItem>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-);
-
-class Home extends Component {
+export default class Home extends Component {
 
     constructor(props) {
-      super(props);
+        super(props);
 
-      this.state = {users: [], search: ''};
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleChange = this.handleChange.bind(this);
-
+        this.state = {search: ''};
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleSubmit(event) {
@@ -52,40 +30,12 @@ class Home extends Component {
             console.log('In send fail');
             console.log(error);
         });
-
-      event.preventDefault();
-  }
-
-  handleChange(event) {
-      this.setState({
-          [event.target.name]: event.target.value
-      });
-      console.log(this.state.search);
-  }
+        console.log(this.state.search);
+    }
 
     render() {
-      return (
-        <div className="App">
-            {navbarInstance}
-            <h1>Users</h1>
-            {this.state.users.map(user =>
-                <div key={user.id}>{user.username}</div>
-            )}
-            {this.state.search}
-
-            <form>
-                <div id='searchDiv' className={'inputField'}>
-                    <input type='text' id='search' name='search' placeholder='Search for your item here...' onChange={this.handleChange}/>
-                </div>
-
-                <div id='submitDiv' className={'inputField'}>
-                    <input id='submit' type='submit' value='Submit' onClick={this.handleSubmit}/>
-                </div>
-            </form>
-
-        </div>
-    );
+        return (
+            <Navbar />
+        );
     }
 }
-
-export default Home;
