@@ -38,7 +38,6 @@ class Home extends Component {
     handleSubmit(event) {
 
       console.log("Search value: " + this.state.search);
-      console.log(JSON.stringify(this.state));
 
       axios.get('/amazonSearch', {
           params: {
@@ -46,9 +45,11 @@ class Home extends Component {
           }
       })
         .then(function(response) {
+            console.log('In send success');
             console.log(response);
         })
         .catch(function(error) {
+            console.log('In send fail');
             console.log(error);
         });
 
