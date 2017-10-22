@@ -34,7 +34,9 @@ app.use('/users', users);
 app.use('/amazonSearch', amazonSearch);
 
 app.get('/mongo', function(req, res) {
-  db.searches.find({search: req.body.search}, function(err, docs) {
+  db.searches.find(function(err, docs) {
+    console.log('sending docs...')
+    console.log(JSON.stringify(docs, null, 2));
     res.send(docs);
   });
 });
