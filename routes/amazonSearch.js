@@ -110,101 +110,105 @@ router.get('/', function(req, res, next) {
             var aliResult = values[1].data;
             var amReport = processAmazonResults(amResult);
             var aliReport = ali.parseHTML(aliResult);
-
-            var totalMin = amReport.amStats.min;
-            if(aliReport.aliStats.min < totalMin) {
-                totalMin = aliReport.aliStats.min;
+            if(amReport.amInfo.length == 0 || aliReport.aliInfo.length == 0){
+                res.status(502).send('Could not find the requested results, please broaden your search terms.');
             }
-            var totalMax = amReport.amStats.max;
-            if(aliReport.aliStats.max > totalMax) {
-                totalMax = aliReport.aliStats.max;
-            }
+            else{
+                var totalMin = amReport.amStats.min;
+                if(aliReport.aliStats.min < totalMin) {
+                    totalMin = aliReport.aliStats.min;
+                }
+                var totalMax = amReport.amStats.max;
+                if(aliReport.aliStats.max > totalMax) {
+                    totalMax = aliReport.aliStats.max;
+                }
 
-            amReport.amInfo.forEach(function(info) {
+                amReport.amInfo.forEach(function(info) {
 
-                info.rawProfit = aliReport.aliStats.mean - info.price;
-                info.percentProfit = (1 - (info.price / aliReport.aliStats.mean)) * 100;
+                    info.rawProfit = (aliReport.aliStats.mean - info.price).toFixed(2);
+                    info.percentProfit = ((1 - (info.price / aliReport.aliStats.mean)) * 100).toFixed(2);
 
-                if(info.percentProfit > 20) {
-                    info.ourEval = "Good";
+                    if(info.percentProfit > 20) {
+                        info.ourEval = "Good";
+                    }
+                    else {
+                        info.ourEval = "Poor";
+                    }
+
+                });
+
+                aliReport.aliInfo.forEach(function(info) {
+
+                    info.rawProfit = (amReport.amStats.mean - info.price).toFixed(2);
+                    info.percentProfit = ((1 - (info.price / amReport.amStats.mean)) * 100).toFixed(2);
+
+                    if(info.percentProfit > 20) {
+                        info.ourEval = "Good";
+                    }
+                    else {
+                        info.ourEval = "Poor";
+                    }
+
+                });
+
+                var amRawProfit = (aliReport.aliStats.mean - amReport.amStats.mean).toFixed(2);
+                var amPercentProfit = ((1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100).toFixed(2);
+                var aliRawProfit = (amReport.amStats.mean - aliReport.aliStats.mean).toFixed(2);
+                var aliPercentProfit = ((1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100).toFixed(2);
+
+                var ourEval = '';
+                if(aliPercentProfit > 0.2) {
+                    ourEval = 'Good'
                 }
                 else {
-                    info.ourEval = "Poor";
+                    ourEval = 'Poor'
                 }
 
-            });
+                amReport.amStats.max = amReport.amStats.max.toFixed(2);
+                amReport.amStats.min = amReport.amStats.min.toFixed(2);
+                amReport.amStats.median = amReport.amStats.median.toFixed(2);
+                amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
 
-            aliReport.aliInfo.forEach(function(info) {
+                amReport.amInfo.forEach(function(info) {
+                    info.price = info.price.toFixed(2);
+                });
 
-                info.rawProfit = amReport.amStats.mean - info.price;
-                info.percentProfit = (1 - (info.price / amReport.amStats.mean)) * 100;
+                aliReport.aliStats.max = aliReport.aliStats.max.toFixed(2);
+                aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
+                aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
+                aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
 
-                if(info.percentProfit > 20) {
-                    info.ourEval = "Good";
+                aliReport.aliInfo.forEach(function(info) {
+                    info.price = info.price.toFixed(2);
+                });
+
+                var prodAnal = {
+                    ali: {
+                        rawProfit: aliRawProfit,
+                        percentProfit: aliPercentProfit
+                    },
+                    am: {
+                        rawProfit: amRawProfit,
+                        percentProfit: amPercentProfit
+                    },
+                    totalMin: totalMin,
+                    totalMax: totalMax,
+                    searchTerm: req.query.search,
+                    ourEval: ourEval
                 }
-                else {
-                    info.ourEval = "Poor";
+
+                var finalReport = {
+                    prodAnal: prodAnal,
+                    amReport: amReport,
+                    aliReport: aliReport
                 }
 
-            });
-
-            var amRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
-            var amPercentProfit = (1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100;
-            var aliRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
-            var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
-
-            var ourEval = '';
-            if(aliPercentProfit > 0.2) {
-                ourEval = 'Good'
+                res.send(finalReport);
             }
-            else {
-                ourEval = 'Poor'
-            }
-
-            amReport.amStats.max = amReport.amStats.max.toFixed(2);
-            amReport.amStats.min = amReport.amStats.min.toFixed(2);
-            amReport.amStats.median = amReport.amStats.median.toFixed(2);
-            amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
-
-            amReport.amInfo.forEach(function(info) {
-                info.price = info.price.toFixed(2);
-            });
-
-            aliReport.aliStats.max = aliReport.aliStats.max.toFixed(2);
-            aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
-            aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
-            aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
-
-            aliReport.aliInfo.forEach(function(info) {
-                info.price = info.price.toFixed(2);
-            });
-
-            var prodAnal = {
-                ali: {
-                    rawProfit: aliRawProfit,
-                    percentProfit: aliPercentProfit
-                },
-                am: {
-                    rawProfit: amRawProfit,
-                    percentProfit: amPercentProfit
-                },
-                totalMin: totalMin,
-                totalMax: totalMax,
-                searchTerm: req.query.search,
-                ourEval: ourEval
-            }
-
-            var finalReport = {
-                prodAnal: prodAnal,
-                amReport: amReport,
-                aliReport: aliReport
-            }
-
-            res.send(finalReport);
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
-            res.status(500).send('Could not access results at this time!');
+            res.status(501).send('Could not access results at this time!');
         });
 
 
