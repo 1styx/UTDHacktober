@@ -1,0 +1,80 @@
+function findAliItems(stringSearch){
+
+    var axios = require('axios');
+    axios.get('https://www.aliexpress.com/wholesale?SearchText='+stringSearch)
+      .then(function (response) {
+
+        var list =  parseHTML(response.data);
+        //console.log(list);
+        //return list;
+      })
+      .catch(function (error) {
+        console.log(error);
+    });
+}
+function callBackParseHTML(data){
+    parseHTML(data);
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function parseHTML(html){
+    let cheerio = require('cheerio');
+    let jsonframe = require('jsonframe-cheerio');
+
+    html = replaceAll(html, "script", "");
+    //console.log(html);
+    let $ = cheerio.load(html);
+    jsonframe($);
+
+    let frame1 = {
+        "items": {
+            _s: "#hs-list-items .list-item",
+            _d: [{
+                "name": "a @ title",
+                "price": "[itemprop=price]",
+                "imageUrl": "img @ src",
+                "itemUrl": "a @ href"
+            }]
+        }
+    }
+    let frame2 = {
+        "items": {
+            _s: "#hs-below-list-items .list-item",
+            _d: [{
+                "name": "a @ title",
+                "price": "[itemprop=price]",
+                "imageUrl": "img @ src",
+                "itemUrl": "a @ href"
+            }]
+       }
+    }
+
+//str.match(/(\d[\.]*)/g)
+    var list1 = $('body').scrape(frame1);
+    var list2 = $('body').scrape(frame2);
+    //console.log(list1);
+    //console.log(list2);
+    var retList = list1.items.concat(list2.items);
+    var listFirstTen = retList.slice(0, 10);
+
+    listFirstTen.forEach(function(element) {
+        var arr = element.price.match(/(\d[\d\.]*)/g);
+        var final = 0.0;
+        for(var i = 0; i < arr.length; i++){
+            final += parseFloat(arr[i]);
+        }
+        final = final/arr.length;
+        element.price = final;
+        element.imageUrl = "https:" + element.imageUrl;
+        element.itemUrl = "https:" + element.itemUrl;
+
+    });
+
+
+
+
+    return listFirstTen;
+}
