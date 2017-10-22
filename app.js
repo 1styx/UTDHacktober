@@ -4,8 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var mongojs = require('mongojs');
-var db = mongojs(connectionString, [collections]);
+var connectionString = "mongodb://nazdevwilson:audrey371000@hobbysite-shard-00-00-uzg5h.mongodb.net:27017,hobbysite-shard-00-01-uzg5h.mongodb.net:27017,hobbysite-shard-00-02-uzg5h.mongodb.net:27017/mysite?ssl=true&replicaSet=HobbySite-shard-0&authSource=admin";
+var db = mongojs(connectionString, ['searches']);
+var ObjectId = mongojs.ObjectId;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -48,4 +51,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  db
+};
