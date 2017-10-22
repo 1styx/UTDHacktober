@@ -1,29 +1,42 @@
 import React, { Component } from 'react';
 import {zip} from './util';
 import Navbar from './navbar';
+import axios from 'axios';
 
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
         
-        axios.get('/searchResults', {
+        this.state = {};
+        axios.get('/amazonSearch', {
                 params: {
-                    query: this.props.match.params.query
+                    search: this.props.match.params.query
                 }
             })
-            .then(function(response) {
+            .then(response => {
                 console.log(response);
-                this.state.aliResults = response.data.aliReport.aliInfo;
-                this.state.aliAnalysis = response.data.aliReport.aliStats;
-                this.state.amazonResults = response.data.amReport.amInfo;
-                this.state.amazonAnalysis = response.data.amReport.amStats;
-                this.state.zippedResults = zip(this.state.aliResults, this.state.amazonResults);
-                this.state.analysis = response.data.analProd;
+                this.setState({
+                        aliResults: response.data.aliReport.aliInfo,
+                        aliAnalysis: response.data.aliReport.aliStats,
+                        amazonResults: response.data.amReport.amInfo,
+                        amazonAnalysis: response.data.amReport.amStats,
+                        zippedResults: zip(response.data.aliReport.aliInfo, response.data.amReport.amInfo),
+                        analysis: 
+                        {
+                            query: response.data.prodAnal.searchTerm,
+                            avgProfitMarginRaw: 0.0,
+                            avgProfitMarginPercent: 0.0,
+                            maxProfitMarginRaw: 0.0,
+                            maxProfitMarginPercent: 0.0,
+                            minPrice: response.data.prodAnal.totalMin,
+                            maxPrice: response.data.prodAnal.totalMin,
+                            ourEval: 'ok'
+                        }
+                });
             })
             .catch(function(error) {
-                console.log(error);
-            }
-        );
+                console.log('Failed search: ' + error);
+            });
         /*
         this.state = {zippedResults: [[{name: 'aliproduct1'}, {name: 'amaproduct1'}],
             [{name: 'aliproduct2'}, {name: 'amaproduct2'}],
@@ -154,9 +167,10 @@ export default class SearchResults extends Component {
             return (
                 <div className="card" style={{height : '100%'}}>
                     <div className="card-block">
-                        <img className="card-img-top img-fluid" src={product.productInfo.imgUrl} alt={product.productInfo.name} />
+                        <img className="card-img-top img-fluid" src={product.productInfo.pic} alt={product.productInfo.name} />
                         <h4 className="card-title">{product.productInfo.name}</h4>
-                        <a href={product.productInfo.url}>Go to Product Page</a>
+                        <p className="card-text">{'$' + product.productInfo.price}</p>
+                        <a href={product.productInfo.link}>Go to Product Page</a>
                     </div>
                 </div>
             );
@@ -174,11 +188,6 @@ export default class SearchResults extends Component {
                 <div className="card" style={{height : '100%'}}>
                     <div className="card-block">
                         <ul>
-                            <li>{'Max: ' + product.productAnalysis.isMax}</li>
-                            <li>{'Min: ' + product.productAnalysis.isMin}</li>
-                            <li>{'Profit Margin $: ' + product.productAnalysis.profitMarginRaw}</li>
-                            <li>{'Profit Margin %: ' + product.productAnalysis.profitMarginPercent}</li>
-                            <li>{'Product Evalution: ' + product.productAnalysis.ourEval}</li>
                         </ul>
                     </div>
                 </div>
@@ -206,13 +215,13 @@ export default class SearchResults extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <Navbar name='Search' parentUrl={this.props.match.url} />
-                <div className='container'>
-                    <div className="card">
-                        <div className="card-block">
-                            <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
+        var display = null;
+        if (typeof Object.keys(this.state).length > 0) {
+            display = (
+                    <div className='container'>
+                        <div className="card">
+                            <div className="card-block">
+                            <h4 className="card-title">{'Product Analytics for "' + this.props.match.params.query + '"'}</h4>
                             <ul className="card-text">
                                 <li>{'Average Profit Margin $: ' + this.state.analysis.avgProfitMarginRaw}</li>
                                 <li>{'Average Profit Margin %: ' + this.state.analysis.avgProfitMarginPercent}</li>
@@ -242,6 +251,12 @@ export default class SearchResults extends Component {
                     </div>
                     {this.state.zippedResults.map(this.createProductRow)}
                 </div>
+            );
+        }
+        return (
+            <div>
+                <Navbar name='Search' parentUrl={this.props.match.url} />
+                {display}
             </div>
         );
     }

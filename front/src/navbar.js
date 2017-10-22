@@ -24,20 +24,6 @@ export default class Navbar extends Component {
 
     handleSubmit(event) {
         this.setState({shouldRedirect: true});
-
-        console.log('Searching: ' + this.state.search);
-        axios.get('/amazonSearch', {
-            params: {
-                search: this.state.search
-            }
-        })
-            .then(function(response) {
-                console.log(response);
-            })
-            .catch(function(error) {
-                console.log('Client search erroring out: ' + error);
-            });
-
         event.preventDefault();
     }
 

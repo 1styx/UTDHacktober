@@ -18,8 +18,8 @@ function processAmazonResults(results) {
     var stats = {
         mean: 0,
         median: 0,
-        max = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]),
-        min = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0])
+        max: parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]),
+        min: parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0])
     }
     var info = [];
 
