@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongojs = require('mongojs');
-var connectionString = "mongodb://nazdevwilson:audrey371000@hobbysite-shard-00-00-uzg5h.mongodb.net:27017,hobbysite-shard-00-01-uzg5h.mongodb.net:27017,hobbysite-shard-00-02-uzg5h.mongodb.net:27017/mysite?ssl=true&replicaSet=HobbySite-shard-0&authSource=admin";
+var connectionString = "mongodb://nazdevwilson:audrey371000@hobbysite-shard-00-00-uzg5h.mongodb.net:27017,hobbysite-shard-00-01-uzg5h.mongodb.net:27017,hobbysite-shard-00-02-uzg5h.mongodb.net:27017/hackathon?ssl=true&replicaSet=HobbySite-shard-0&authSource=admin";
 var db = mongojs(connectionString, ['searches']);
 var ObjectId = mongojs.ObjectId;
 
@@ -32,6 +32,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/amazonSearch', amazonSearch);
+
+app.post('/mongo', function(req, res) {
+  console.log('We got request: ' + req.body);
+  console.log('With attribs: ' + Object.keys(req.body));
+  db.mycollection.find({search: req.body.search}).forEach(function (err, doc) {
+    if (!doc) {
+      // we visited all docs in the collection
+      console.log('Inserting...');
+      db.searches.insert({search: req.body.search, profit: req.body.profit});
+    }
+    // doc is a document in the collection
+  })
+
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
