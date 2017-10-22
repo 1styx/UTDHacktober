@@ -1,7 +1,8 @@
-
 var express = require('express');
 var router = express.Router();
 var amazon = require('amazon-product-api');
+var ali = require('./AliexpressParser');
+var axios = require('axios');
 
 // Establish Amazon search abilities
 var client = amazon.createClient({
@@ -42,9 +43,11 @@ function processAmazonResults(results) {
     });
 
     var myLength = info.length;
-    console.log('myLength: ' + myLength);
+    //console.log('myLength: ' + myLength);
 
     stats.mean = stats.mean / (100 * myLength);
+
+    var retInfo = info;
 
     info.sort(function(a, b) {
         return parseFloat(a.price) - parseFloat(b.price);
@@ -52,13 +55,13 @@ function processAmazonResults(results) {
 
     //console.log('Sorted info', info);
 
-    console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
+    //console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
     stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 200;
-    console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
+    //console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
 
     var report = {
-        stats: stats,
-        info: info
+        amStats: stats,
+        amInfo: retInfo
     }
 
     return report;
@@ -68,6 +71,7 @@ function processAmazonResults(results) {
 router.get('/', function(req, res, next) {
     console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
 
+/*
     client.itemSearch({
         searchIndex: 'All',
         keywords: req.query.search,
@@ -86,6 +90,33 @@ router.get('/', function(req, res, next) {
             console.log(error);
         });
     });
+*/
+
+/*
+    axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)
+        .then(function(response) {
+            console.log(response);
+            var list = ali.parseHTML(response.data);
+            console.log(list);
+
+            res.send(list);
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+*/
+
+
+    Promises.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
+        .then(function(values) {
+            console.log(values);
+
+            res.send(values);
+        })
+        .catch(function(error) {
+            console.log('Promises erroring out: ' + error);
+        });
+
 
 });
 
