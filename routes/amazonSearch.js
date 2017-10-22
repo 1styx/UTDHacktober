@@ -39,7 +39,7 @@ function processAmazonResults(results) {
         */
 
         var picUrl = '../public/images/No_image_available.svg';
-        if(result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0] !== undefined) {
+        if(typeof result.ImageSets !== 'undefined') {
             var picUrl = result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0];
         }
 
