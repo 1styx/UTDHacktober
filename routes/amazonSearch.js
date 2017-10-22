@@ -151,10 +151,10 @@ router.get('/', function(req, res, next) {
 
                 });
 
-                var amRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
-                var amPercentProfit = (1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100;
-                var aliRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
-                var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
+                var amRawProfit = (aliReport.aliStats.mean - amReport.amStats.mean).toFixed(2);
+                var amPercentProfit = ((1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100).toFixed(2);
+                var aliRawProfit = (amReport.amStats.mean - aliReport.aliStats.mean).toFixed(2);
+                var aliPercentProfit = ((1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100).toFixed(2);
 
                 var ourEval = '';
                 if(aliPercentProfit > 0.2) {
