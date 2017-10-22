@@ -173,6 +173,14 @@ router.get('/', function(req, res, next) {
             var aliRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
             var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
 
+            var ourEval = '';
+            if(aliPercentProfit > 0.2) {
+                ourEval = 'Good'
+            }
+            else {
+                ourEval = 'Poor'
+            }
+
             var prodAnal = {
                 ali: {
                     rawProfit: aliRawProfit,
@@ -184,7 +192,8 @@ router.get('/', function(req, res, next) {
                 },
                 totalMin: totalMin,
                 totalMax: totalMax,
-                searchTerm: req.query.search
+                searchTerm: req.query.search,
+                ourEval: ourEval
             }
 
             var finalReport = {
