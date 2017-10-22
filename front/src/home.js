@@ -2,31 +2,44 @@ import React, { Component } from 'react';
 import Navbar from './navbar';
 import axios from 'axios';
 
+
 export default class Home extends Component {
     constructor(props) {
         super(props);
 
-        axios.get('/mongo')
+        this.state = {
+            docs: []
+        }
+
+        axios.get('/mongo', {
+            headers: {
+                'Cache-Control': 'no-cache'
+            }
+        })
         .then(response => {
             console.log(response);
 
             this.setState({
                 docs: response.data
             });
+
+            console.log('State: ' + JSON.stringify(this.state, null, 2));
         })
         .catch(function(error) {
             console.log(error);
         });
 
-        this.listElements = this.listElements.bind(this);
+        this.listElement = this.listElement.bind(this);
     }
 
-    listElements() {
+    listElement(value, index, array) {
+
         return (
-            this.state.docs.forEach(function(doc) {
-                <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-            })
-        );
+            this.state.docs.map(function(doc){
+                return <button type="button" className="list-group-item list-group-item-action">{doc.search}</button>;
+              })
+        )
+
     }
 
     render() {
@@ -34,19 +47,12 @@ export default class Home extends Component {
             <div>
                 <Navbar pageName='Home' parentUrl={this.props.match.url} />
                 <div className='container'>
-                    <img src={'https://image.ibb.co/ksvCvm/Mother_Ship.png'}/>
-                    <h2>Welcome to The MotherShip</h2>
-
-                    <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action">
-                            Cras justo odio
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-                        <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-                        <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
-                        <button type="button" class="list-group-item list-group-item-action">Vestibulum at eros</button>
-                        {this.listElements}
+                    <div className="list-group" style={{float:'right'}}>
+                        <h3>Recent Items</h3>
+                        {this.listElement()}
                     </div>
+                    <img src={'https://image.ibb.co/ksvCvm/Mother_Ship.png'}/>
+                    <h2 style={{clear:'left'}}>Welcome to The MotherShip</h2>
                 </div>
             </div>
         );
