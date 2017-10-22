@@ -33,23 +33,10 @@ export default class Home extends Component {
         });
 
         this.listElement = this.listElement.bind(this);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(search) {
-
-        console.log('Clicking!... Search: ' + search);
-        this.state.redirectComponent = <Redirect from={'/'} to={'/search/' + encodeURIComponent(search)} />;
     }
 
     listElement(value, index, array) {
-        var outerScope = this;
-        return (
-            this.state.docs.map(function(value, index, array){
-                return <a key={index} className="button list-group-item list-group-item-action" href={'/search/' + encodeURIComponent(value.search)}>{value.search}</a>;
-              })
-        )
-
+        return (<a key={index} className="button list-group-item list-group-item-action" href={'/search/' + encodeURIComponent(value.search)}>{value.search}</a>);
     }
 
     render() {
@@ -59,12 +46,16 @@ export default class Home extends Component {
                 {this.state.redirectComponent}
                 <Navbar pageName='Home' parentUrl={this.props.match.url} />
                 <div className='container'>
-                    <div className="list-group w-25" style={{float:'right'}}>
-                        <h3>Recent Items</h3>
-                        {this.listElement()}
+                    <div className='row'>
+                        <div className='col-7'>
+                            <img className='mx-auto d-block' src={'https://image.ibb.co/ksvCvm/Mother_Ship.png'}/>
+                            <h2 className='text-center pt-5'>Welcome to The MotherShip</h2>
+                        </div>
+                        <div className='col list-group'>
+                            <h2>Recent Items</h2>
+                            {this.state.docs.slice(0).reverse().map(this.listElement)}
+                        </div>
                     </div>
-                    <img src={'https://image.ibb.co/ksvCvm/Mother_Ship.png'}/>
-                    <h2>Welcome to The MotherShip</h2>
                 </div>
             </div>
         );

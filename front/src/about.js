@@ -12,8 +12,9 @@ export default class Home extends Component {
                     </h2>
                     <p className='text-muted'>
                     	Bringing you all the insider information you need to set up your own
-                        online storefront, or just make informed decisions with your hard earned
-                        dollars.
+                    	Drop Shipping service. MotherShip is the perfect resource for both service-providers
+                    	and curious consumers alike, integrating the two of the most popular online retailers on the planet
+                    	to give you valuable price comparison data.
                     </p>
                     <h4>
                     	AliExpress
