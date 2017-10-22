@@ -37,11 +37,22 @@ function processAmazonResults(results) {
         console.log('Binding: ' + result.ItemAttributes[0].Binding + ' EAN: ' + result.ItemAttributes[0].EAN);
         */
 
+        var picUrl = '../public/images/No_image_available.svg';
+        if(typeof result.ImageSets !== 'undefined') {
+            var picUrl = result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0];
+        }
+
+        var titleString = '';
+        if(result.ItemAttributes[0].Title[0] !== undefined) {
+            titleString = result.ItemAttributes[0].Title[0];
+        }
+
+        console.log(result);
         var thisInfo = {
-            name: result.ItemAttributes[0].Title[0],
+            name: titleString,
             link: result.DetailPageURL[0],
             price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100,
-            pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
+            pic: picUrl
         }
 
         if(thisInfo.price > stats.max) {
@@ -65,7 +76,7 @@ function processAmazonResults(results) {
     info.sort(function(a, b) {
         return parseFloat(a.price) - parseFloat(b.price);
     });
-    
+
     var halfIndex = Math.floor(info.length/2);
     if(info.length % 2) {
         stats.median = parseInt(info[halfIndex].price);
@@ -84,7 +95,7 @@ function processAmazonResults(results) {
 
 /* GET amazon search results. */
 router.get('/', function(req, res, next) {
-    console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
+    //console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
 
 /*
     client.itemSearch({
@@ -183,6 +194,27 @@ router.get('/', function(req, res, next) {
                 ourEval = 'Poor'
             }
 
+<<<<<<< HEAD
+=======
+            amReport.amStats.max = amReport.amStats.max.toFixed(2);
+            amReport.amStats.min = amReport.amStats.min.toFixed(2);
+            amReport.amStats.median = amReport.amStats.median.toFixed(2);
+            amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
+
+            amReport.amInfo.forEach(function(info) {
+                info.price = info.price.toFixed(2);
+            });
+
+            aliReport.aliStats.max = aliReport.aliStats.max.toFixed(2);
+            aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
+            aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
+            aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
+
+            aliReport.aliInfo.forEach(function(info) {
+                info.price = info.price.toFixed(2);
+            });
+
+>>>>>>> 20c3939d66030b753a6f2584c44f34ff5900baef
             var prodAnal = {
                 ali: {
                     rawProfit: aliRawProfit,
@@ -208,7 +240,11 @@ router.get('/', function(req, res, next) {
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
+<<<<<<< HEAD
             res.status(500).send('Could not access results at this time!');
+=======
+            console.error(error.stack);
+>>>>>>> 20c3939d66030b753a6f2584c44f34ff5900baef
         });
 
 
