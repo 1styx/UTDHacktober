@@ -34,7 +34,7 @@ function processAmazonResults(results) {
         mean: 0,
         median: 0,
         max: statMax,
-        min: statMin
+        min: statMin,
     }
     var info = [];
 
@@ -114,24 +114,42 @@ router.get('/', function(req, res, next) {
                 res.status(502).send('Could not find the requested results, please broaden your search terms.');
             }
             else{
-                var totalMin = amReport.amStats.min;
-                if(aliReport.aliStats.min < totalMin) {
+                var totalMin;
+                if(aliReport.aliStats.min < amReport.amStats.min) {
                     totalMin = aliReport.aliStats.min;
+                    var i = 0;
+                    while(aliReport[i].aliInfo.price != totalMin && i < aliReport.lenght){
+                        i++;
+                    }
+                    aliReport[i].aliInfo.ourEval = "Best";
+                }
+                else{
+                    totalMin = amReport.amStats.min;
+                    var i = 0;
+                    while(amReport[i].amInfo.price != totalMin && i < amReport.lenght){
+                        i++;
+                    }
+                    amReport[i].amInfo.ourEval = "Best";
                 }
                 var totalMax = amReport.amStats.max;
                 if(aliReport.aliStats.max > totalMax) {
                     totalMax = aliReport.aliStats.max;
                 }
 
+
+
                 amReport.amInfo.forEach(function(info) {
 
                     info.rawProfit = (aliReport.aliStats.mean - info.price).toFixed(2);
                     info.percentProfit = ((1 - (info.price / aliReport.aliStats.mean)) * 100).toFixed(2);
 
-                    if(info.percentProfit > 20) {
+                    if(info.percentProfit > 20 && info.ourEval != "Best") {
                         info.ourEval = "Good";
                     }
-                    else {
+                    else if(info.percentProfit > 10 && info.ourEval != "Best"){
+                        info.ourEval = "Okay";
+                    }
+                    else if(info.ourEval != "Best"){
                         info.ourEval = "Poor";
                     }
 
@@ -142,10 +160,13 @@ router.get('/', function(req, res, next) {
                     info.rawProfit = (amReport.amStats.mean - info.price).toFixed(2);
                     info.percentProfit = ((1 - (info.price / amReport.amStats.mean)) * 100).toFixed(2);
 
-                    if(info.percentProfit > 20) {
+                    if(info.percentProfit > 20 && info.ourEval != "Best"){
                         info.ourEval = "Good";
                     }
-                    else {
+                    else if(info.percentProfit > 10 && info.ourEval != "Best"){
+                        info.ourEval = "Okay";
+                    }
+                    else if(info.ourEval != "Best"){
                         info.ourEval = "Poor";
                     }
 
