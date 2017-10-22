@@ -7,7 +7,7 @@ export default class Home extends Component {
         super(props);
 
         axios.get('/mongo')
-        .then(function(response) {
+        .then(response => {
             console.log(response);
 
             this.setState({
@@ -23,6 +23,7 @@ export default class Home extends Component {
             <div>
                 <Navbar pageName='Home' parentUrl={this.props.match.url} />
                 <div className='container'>
+                    <img src={'https://image.ibb.co/ksvCvm/Mother_Ship.png'}/>
                     Hello World
                 </div>
             </div>
