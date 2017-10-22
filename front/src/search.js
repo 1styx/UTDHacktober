@@ -44,7 +44,6 @@ export default class SearchResults extends Component {
     }
 
     createProductInfoCard(product) {
-        console.log(product);
         if (product == null) {
             return (
                 <div className="card" style={{height : '100%'}}>
@@ -106,7 +105,6 @@ export default class SearchResults extends Component {
 
     render() {
         var display = null;
-        console.log(this.state);
         if (Object.keys(this.state).length > 0) {
             display = (
                     <div className='container'>
