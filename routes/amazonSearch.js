@@ -2,7 +2,6 @@
 var express = require('express');
 var router = express.Router();
 var amazon = require('amazon-product-api');
-import { processAmazonResults } from '../util'
 
 // Establish Amazon search abilities
 var client = amazon.createClient({
@@ -10,6 +9,60 @@ var client = amazon.createClient({
     awsSecret: 'uikt9pPB/5Tcq8W7pShIWaO38zLyRazpn/zBcaDW',
     awsTag: 'evwilson-20'
 });
+
+function processAmazonResults(results) {
+    console.log('In Amazon query success');
+    //console.log(results);
+
+    var stats = {
+        mean: 0,
+        median: 0
+    }
+    var info = [];
+
+    results.forEach(function(result) {
+        /*
+        console.log('Item link keys: ' + Object.keys(result.ItemLinks[0]) + ' Item attribs: ' + Object.keys(result.ItemAttributes[0]));
+        console.log('Binding: ' + result.ItemAttributes[0].Binding + ' EAN: ' + result.ItemAttributes[0].EAN);
+        */
+        //console.log(JSON.stringify(result, null, 2));
+
+        var thisInfo = {
+            name: result.ItemAttributes[0].Title[0],
+            link: result.DetailPageURL[0],
+            price: result.OfferSummary[0].LowestNewPrice[0].Amount[0],
+            pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
+        }
+
+        //console.log(JSON.stringify(thisInfo, null, 2));
+        info.push(thisInfo);
+
+        stats.mean += thisInfo.price;
+
+    });
+
+    var myLength = info.length;
+    console.log('myLength: ' + myLength);
+
+    stats.mean = stats.mean / (100 * myLength);
+
+    info.sort(function(a, b) {
+        return parseFloat(a.price) - parseFloat(b.price);
+    });
+
+    //console.log('Sorted info', info);
+
+    console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
+    stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 200;
+    console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
+
+    var report = {
+        stats: stats,
+        info: info
+    }
+
+    return report;
+}
 
 /* GET amazon search results. */
 router.get('/', function(req, res, next) {
@@ -22,7 +75,9 @@ router.get('/', function(req, res, next) {
         itemPage: 1
     })
     .then(function(results) {
-        processAmazonResults(results);
+        var report = processAmazonResults(results);
+        //console.log(report);
+        res.send(report);
     })
     .catch(function(err) {
         console.log('In Amazon query failure');
