@@ -16,14 +16,22 @@ function processAmazonResults(results) {
 
     results = results.filter(
         function(result) {
-            return typeof result.OfferSummary[0].LowestNewPrice[0].Amount !== 'undefined';
+            if (typeof result.OfferSummary === 'undefined') {
+                return false;
+            }
+            if (typeof result.OfferSummary[0].LowestNewPrice === 'undefined') {
+                return false;
+            }
+            if (typeof result.OfferSummary[0].LowestNewPrice[0].Amount === 'undefined') {
+                return false;
+            }
+            return true;
         }
     );
-
     if(results.length == 0){
         var report = {
-            aliStats: {},
-            aliInfo: []
+            amStats: {},
+            amInfo: []
         }
         return report;
     }
@@ -176,11 +184,13 @@ router.get('/', function(req, res, next) {
                 var aliPercentProfit = ((1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100).toFixed(2);
 
                 var ourEval = '';
-                if(aliPercentProfit > 0.2) {
-                    ourEval = 'Good'
+                if(aliPercentProfit > 20 || amPercentProfit > 20) {
+                    ourEval = 'Good';
                 }
-                else {
-                    ourEval = 'Poor'
+                else if (aliPercentProfit > 10 || amPercentProfit > 10) {
+                    ourEval = 'OK';
+                } else {
+                    ourEval = 'Poor';
                 }
 
                 amReport.amStats.max = amReport.amStats.max.toFixed(2);

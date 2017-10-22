@@ -18,11 +18,23 @@ function getEvalColor(evalStr) {
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {};
+        
+        this.componentWillReceiveProps(this.props);
+
+        this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
+        this.createProductInfoCard = this.createProductInfoCard.bind(this);
+        this.createProductRow = this.createProductRow.bind(this);
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if (Object.keys(this.state).length > 0) {
+            this.setState({});
+        }
         axios.get('/amazonSearch', {
                 params: {
-                    search: this.props.match.params.query
+                    search: nextProps.match.params.query
                 }
             })
             .then(response => {
@@ -59,15 +71,14 @@ export default class SearchResults extends Component {
                 });
             })
             .catch(error => {
-                console.log('Failed search: ' + error);
-                console.error('Dummy');
-
-                this.setState({couldSearch: false});
+                console.log(error);
+                this.setState(
+                        {
+                            couldSearch: false,
+                            errorCode: error.response.status
+                        }
+                    );
             });
-
-        this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
-        this.createProductInfoCard = this.createProductInfoCard.bind(this);
-        this.createProductRow = this.createProductRow.bind(this);
     }
 
     createProductInfoCard(product) {
@@ -98,15 +109,15 @@ export default class SearchResults extends Component {
             );
         } else {
             var evalColor = 'list-group-item-' + getEvalColor(product.ourEval);
-            var extraStyle = {};
+            var textColor = '';
             if (product.ourEval === 'Best') {
-                extraStyle = {borderColor: '#DAA520'};
+                textColor= 'text-warning';
             }
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
                     <div className="card-block d-flex align-items-center">
                         <ul className="list-group">
-                            <li className={"list-group-item flex-column align-items-center " + evalColor}>{product.ourEval}</li>
+                            <li className={"list-group-item flex-column align-items-center " + evalColor + ' ' + textColor}>{product.ourEval}</li>
                             <li className="list-group-item">{'Average Savings: $' + product.rawProfit}</li>
                             <li className="list-group-item">{'Percent Savings: ' + product.percentProfit + '%'}</li>
                         </ul>
@@ -208,11 +219,18 @@ export default class SearchResults extends Component {
                         </div>
                 );
             } else {
+                var message = 'An Error Occurred. Please Try Again Later.';
+                if (this.state.errorCode === 501) {
+                    message = 'You Are Accessing The API Too Quickly. Please Try Again Later.';
+                } else if (this.state.errorCode === 502) {
+                    message = 'Not Enough Search Results. Please Try A Different Search.';
+                }
+                
                 display = (
                         <div className='container'>
                             <div className="card text-center rounded-0">
                                 <div className="card-block">
-                                    <h4 className="card-title">Cannot Load Search. Please Try Again Later.</h4>
+                                    <h4 className="card-title">{message}</h4>
                                 </div>
                             </div>
                         </div>
