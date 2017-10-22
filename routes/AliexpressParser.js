@@ -19,7 +19,7 @@ function callBackParseHTML(data){
 }
 
 function replaceAll(str, find, replace) {
-    console.log('str: ' + str);
+    //console.log('str: ' + str);
     return str.replace(new RegExp(find, 'g'), replace);
 }
 
@@ -65,8 +65,8 @@ function parseHTML(html){
     var mean = 0;
     var finalList = [];
 
-    var max = listFirstTen[0].price;
-    var min = listFirstTen[0].price;
+    var max = 0;
+    var min = Number.MAX_SAFE_INTEGER;
 
     listFirstTen.forEach(function(element) {
         var arr = element.price.match(/(\d[\d\.]*)/g);
