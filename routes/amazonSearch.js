@@ -19,7 +19,7 @@ function processAmazonResults(results) {
             return typeof result.OfferSummary[0].LowestNewPrice[0].Amount !== 'undefined';
         }
     );
-    
+
     var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     //console.log('Starting max: ' + statMax + ', Starting min: ' + statMin);
@@ -66,7 +66,7 @@ function processAmazonResults(results) {
     info.sort(function(a, b) {
         return parseFloat(a.price) - parseFloat(b.price);
     });
-    
+
     var halfIndex = Math.floor(info.length/2);
     if(info.length % 2) {
         stats.median = parseInt(info[halfIndex].price);
@@ -187,8 +187,6 @@ router.get('/', function(req, res, next) {
             amReport.amStats.min = amReport.amStats.min.toFixed(2);
             amReport.amStats.median = amReport.amStats.median.toFixed(2);
             amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
-            amReport.amStats.rawProfit = amReport.amStats.rawProfit.toFixed(2);
-            amReport.amStats.percentProfit = amReport.amStats.percentProfit.toFixed(2);
 
             amReport.amInfo.forEach(function(info) {
                 info.price = info.price.toFixed(2);
@@ -198,8 +196,6 @@ router.get('/', function(req, res, next) {
             aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
             aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
             aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
-            aliReport.aliStats.rawProfit = aliReport.aliStats.rawProfit.toFixed(2);
-            aliReport.aliStats.percentProfit = aliReport.aliStats.percentProfit.toFixed(2);
 
             aliReport.aliInfo.forEach(function(info) {
                 info.price = info.price.toFixed(2);
@@ -230,6 +226,7 @@ router.get('/', function(req, res, next) {
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
+            console.error(error.stack);
         });
 
 
