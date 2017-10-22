@@ -105,7 +105,7 @@ router.get('/', function(req, res, next) {
 
     Promise.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
         .then(function(values) {
-            
+
             var amResult = values[0];
             var aliResult = values[1].data;
             var amReport = processAmazonResults(amResult);
