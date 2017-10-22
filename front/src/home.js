@@ -38,7 +38,7 @@ export default class Home extends Component {
 
     handleClick(search) {
 
-        console.log('Clicking!... Search: ' + search);
+        //console.log('Clicking!... Search: ' + search);
         this.state.redirectComponent = <Redirect from={'/'} to={'/search/' + encodeURIComponent(search)} />;
     }
 
