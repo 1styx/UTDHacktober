@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 var amazon = require('amazon-product-api');
+import { processAmazonResults } from '../util'
 
 // Establish Amazon search abilities
 var client = amazon.createClient({
@@ -17,11 +18,11 @@ router.get('/', function(req, res, next) {
     client.itemSearch({
         searchIndex: 'All',
         keywords: req.query.search,
+        responseGroup: 'Medium',
         itemPage: 1
     })
     .then(function(results) {
-        console.log('In Amazon query success');
-        console.log(results);
+        processAmazonResults(results);
     })
     .catch(function(err) {
         console.log('In Amazon query failure');

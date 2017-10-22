@@ -1,6 +1,44 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class Navbar extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {search: ''};
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleSubmit(event) {
+
+        console.log("Search value: " + this.state.search);
+        console.log(JSON.stringify(this.state));
+
+        axios.get('/amazonSearch', {
+                params: {
+                    search: this.state.search
+                }
+            })
+            .then(function(response) {
+                console.log('In send success');
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log('In send fail');
+                console.log(error);
+            });
+
+        event.preventDefault();
+    }
+
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
+        console.log(this.state.search);
+    }
+
     render() {
         return(
             <div>
@@ -9,7 +47,7 @@ export default class Navbar extends Component {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <a className="navbar-brand" href="#">Navbar</a>
-                
+
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item active">
