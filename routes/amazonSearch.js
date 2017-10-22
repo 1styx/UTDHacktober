@@ -127,12 +127,64 @@ router.get('/', function(req, res, next) {
             var amReport = processAmazonResults(amResult);
             var aliReport = ali.parseHTML(aliResult);
 
-            var totalMin = amReport.amInfo[0].price;
+            var totalMin = amReport.amStats.min;
+            if(aliReport.aliStats.min < totalMin) {
+                totalMin = aliReport.aliStats.min;
+            }
+            var totalMax = amReport.amStats.max;
+            if(aliReport.aliStats.max > totalMax) {
+                totalMax = aliReport.aliStats.max;
+            }
+
             amReport.amInfo.forEach(function(info) {
 
-            })
+                info.rawProfit = info.price - aliReport.aliStats.mean;
+                info.percentProfit = (1 - (info.price / aliReport.aliStats.mean)) * 100;
+
+                if(info.percentProfit > 20) {
+                    info.ourEval = "Good";
+                }
+                else {
+                    info.ourEval = "Poor";
+                }
+
+            });
+
+            aliReport.aliInfo.forEach(function(info) {
+
+                info.rawProfit = info.price - amReport.amStats.mean;
+                info.percentProfit = (1 - (info.price / amReport.amStats.mean)) * 100;
+
+                if(info.percentProfit > 20) {
+                    info.ourEval = "Good";
+                }
+                else {
+                    info.ourEval = "Poor";
+                }
+
+            });
+
+            var amRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
+            var amPercentProfit = (1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100;
+            var aliRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
+            var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
+
+            var prodAnal = {
+                ali: {
+                    rawProfit: aliRawProfit,
+                    percentProfit: aliPercentProfit
+                },
+                am: {
+                    rawProfit: amRawProfit,
+                    percentProfit: amPercentProfit
+                },
+                totalMin: totalMin,
+                totalMax: totalMax,
+                searchTerm: req.query.search
+            }
 
             var finalReport = {
+                prodAnal: prodAnal,
                 amReport: amReport,
                 aliReport: aliReport
             }
