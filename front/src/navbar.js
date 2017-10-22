@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import {Redirect} from 'react-router';
 
 export default class Navbar extends Component {
@@ -24,20 +23,6 @@ export default class Navbar extends Component {
 
     handleSubmit(event) {
         this.setState({shouldRedirect: true});
-
-        console.log('Searching: ' + this.state.search);
-        axios.get('/amazonSearch', {
-            params: {
-                search: this.state.search
-            }
-        })
-            .then(function(response) {
-                console.log(response);
-            })
-            .catch(function(error) {
-                console.log('Client search erroring out: ' + error);
-            });
-
         event.preventDefault();
     }
 
@@ -48,7 +33,7 @@ export default class Navbar extends Component {
     }
 
     createNavLink(curVal, index, array) {
-        if (curVal.name == this.props.pageName) {
+        if (curVal.name === this.props.pageName) {
             return (<li key={index} className="nav-item active"><a className="nav-link" href={curVal.link}>{curVal.name}<span className="sr-only">(current)</span></a></li>);
         } else {
             return (<li key={index} className="nav-item"><a className="nav-link" href={curVal.link}>{curVal.name}</a></li>);
