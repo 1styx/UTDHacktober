@@ -53,7 +53,7 @@ export default class SearchResults extends Component {
             return (
                 <div className="card" style={{height : '100%'}}>
                     <div className="card-block">
-                        <img className="card-img-top img-fluid" src={product.pic} alt={product.name} />
+                        <img className="card-img-top img-fluid" src={product.pic} alt='No Image Available' />
                         <h4 className="card-title">{product.name}</h4>
                         <p className="card-text">{'$' + product.price}</p>
                         <a href={product.link}>Go to Product Page</a>

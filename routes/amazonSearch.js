@@ -19,10 +19,9 @@ function processAmazonResults(results) {
             return typeof result.OfferSummary[0].LowestNewPrice[0].Amount !== 'undefined';
         }
     );
-    
+
     var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
-    //console.log('Starting max: ' + statMax + ', Starting min: ' + statMin);
 
     var stats = {
         mean: 0,
@@ -79,6 +78,7 @@ function processAmazonResults(results) {
         amInfo: retInfo
     }
 
+    console.log('end of amazon');
     return report;
 }
 
@@ -183,39 +183,17 @@ router.get('/', function(req, res, next) {
                 ourEval = 'Poor'
             }
 
-            amReport.amStats.max = amReport.amStats.max.toFixed(2);
-            amReport.amStats.min = amReport.amStats.min.toFixed(2);
-            amReport.amStats.median = amReport.amStats.median.toFixed(2);
-            amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
-            amReport.amStats.rawProfit = amReport.amStats.rawProfit.toFixed(2);
-            amReport.amStats.percentProfit = amReport.amStats.percentProfit.toFixed(2);
-
-            amReport.amInfo.forEach(function(info) {
-                info.price = info.price.toFixed(2);
-            });
-
-            aliReport.aliStats.max = aliReport.aliStats.max.toFixed(2);
-            aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
-            aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
-            aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
-            aliReport.aliStats.rawProfit = aliReport.aliStats.rawProfit.toFixed(2);
-            aliReport.aliStats.percentProfit = aliReport.aliStats.percentProfit.toFixed(2);
-
-            aliReport.aliInfo.forEach(function(info) {
-                info.price = info.price.toFixed(2);
-            });
-
             var prodAnal = {
                 ali: {
-                    rawProfit: aliRawProfit.toFixed(2),
-                    percentProfit: aliPercentProfit.toFixed(2)
+                    rawProfit: aliRawProfit,
+                    percentProfit: aliPercentProfit
                 },
                 am: {
-                    rawProfit: amRawProfit.toFixed(2),
-                    percentProfit: amPercentProfit.toFixed(2)
+                    rawProfit: amRawProfit,
+                    percentProfit: amPercentProfit
                 },
-                totalMin: totalMin.toFixed(2),
-                totalMax: totalMax.toFixed(2),
+                totalMin: totalMin,
+                totalMax: totalMax,
                 searchTerm: req.query.search,
                 ourEval: ourEval
             }
@@ -230,6 +208,7 @@ router.get('/', function(req, res, next) {
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
+            res.status(500).send('Could not access results at this time!');
         });
 
 
