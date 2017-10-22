@@ -46,7 +46,7 @@ function processAmazonResults(results) {
 
         var picUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';
         if(typeof result.ImageSets !== 'undefined') {
-            var picUrl = result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0];
+            var picUrl = result.ImageSets[0].ImageSet[0].LargeImage[0].URL[0];
         }
 
         var titleString = '';
@@ -105,7 +105,7 @@ router.get('/', function(req, res, next) {
 
     Promise.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
         .then(function(values) {
-            
+
             var amResult = values[0];
             var aliResult = values[1].data;
             var amReport = processAmazonResults(amResult);
