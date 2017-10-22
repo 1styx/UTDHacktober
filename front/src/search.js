@@ -5,11 +5,10 @@ import Navbar from './navbar';
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
-        // props.searchQuery is the string passed to the backend call
         /*
         axios.get('/searchResults', {
                 params: {
-                    query: this.props.searchQuery
+                    query: this.props.match.params.query
                 }
             })
             .then(function(response) {
@@ -206,7 +205,7 @@ export default class SearchResults extends Component {
     render() {
         return (
             <div>
-                <Navbar />
+                <Navbar name='Search' parentUrl={this.props.match.url} />
                 <div className='container'>
                     <div className="card">
                         <div className="card-block">

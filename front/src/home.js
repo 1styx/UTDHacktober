@@ -9,7 +9,7 @@ export default class Home extends Component {
     render() {
         return (
             <div>
-                <Navbar />
+                <Navbar pageName='Home' parentUrl={this.props.match.url} />
                 <div className='container'>
                     <h4>
                         header
