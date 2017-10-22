@@ -15,11 +15,15 @@ function processAmazonResults(results) {
     console.log('In Amazon query success');
     //console.log(results);
 
+    var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
+    var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
+    //console.log('Starting max: ' + statMax + ', Starting min: ' + statMin);
+
     var stats = {
         mean: 0,
         median: 0,
-        max = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]),
-        min = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0])
+        max: statMax,
+        min: statMin
     }
     var info = [];
 
@@ -33,7 +37,7 @@ function processAmazonResults(results) {
         var thisInfo = {
             name: result.ItemAttributes[0].Title[0],
             link: result.DetailPageURL[0],
-            price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]),
+            price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100,
             pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
         }
 
@@ -54,7 +58,7 @@ function processAmazonResults(results) {
     var myLength = info.length;
     //console.log('myLength: ' + myLength);
 
-    stats.mean = stats.mean / (100 * myLength);
+    stats.mean = stats.mean / (myLength);
 
     var retInfo = info;
 
@@ -65,7 +69,7 @@ function processAmazonResults(results) {
     //console.log('Sorted info', info);
 
     //console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
-    stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 200;
+    stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 2;
     //console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
 
     var report = {
