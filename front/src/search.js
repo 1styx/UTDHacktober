@@ -85,24 +85,26 @@ export default class SearchResults extends Component {
                 </div>
             );
         } else {
-            var evalColor = 'bg-light';
+            var evalColor = 'list-group-item-light';
             if (product.ourEval === 'Poor') {
-                evalColor = 'bg-danger';
+                evalColor = 'list-group-item-danger';
             } else if (product.ourEval === 'OK') {
-                evalColor = 'bg-warning';
+                evalColor = 'list-group-item-warning';
             } else {
-                evalColor = 'bg-success';
+                evalColor = 'list-group-item-success';
+            }
+            var extraStyle = {};
+            if (product.ourEval === 'Best') {
+                extraStyle = {borderColor: '#DAA520'};
             }
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
-                    <div className="card-block">
-                        <div className={evalColor + ' text-white text-center p-3 mb-3'}>
-                            <h3>{product.ourEval}</h3>
-                        </div>
-                        <ul>
-                            <li>{'Profit $: ' + product.rawProfit}</li>
-                            <li>{'Profit %: ' + product.percentProfit}</li>
-                        </ul>
+                    <div className="card-block d-flex align-items-center">
+                        <ul className="list-group">
+                            <li className={"list-group-item " + evalColor}>{product.ourEval}</li>
+                            <li className="list-group-item">{'Average Savings: $' + product.rawProfit}</li>
+                            <li className="list-group-item">{'Percent Savings: ' + product.percentProfit + '%'}</li>
+                          </ul>
                     </div>
                 </div>
             );
