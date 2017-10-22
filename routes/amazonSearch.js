@@ -17,7 +17,9 @@ function processAmazonResults(results) {
 
     var stats = {
         mean: 0,
-        median: 0
+        median: 0,
+        max = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]),
+        min = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0])
     }
     var info = [];
 
@@ -33,6 +35,13 @@ function processAmazonResults(results) {
             link: result.DetailPageURL[0],
             price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]),
             pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
+        }
+
+        if(thisInfo.price > stats.max) {
+            stats.max = thisInfo.price;
+        }
+        if(thisInfo.price < stats.min) {
+            stats.min = thisInfo.price;
         }
 
         //console.log(JSON.stringify(thisInfo, null, 2));
@@ -117,6 +126,11 @@ router.get('/', function(req, res, next) {
             var aliResult = values[1].data;
             var amReport = processAmazonResults(amResult);
             var aliReport = ali.parseHTML(aliResult);
+
+            var totalMin = amReport.amInfo[0].price;
+            amReport.amInfo.forEach(function(info) {
+
+            })
 
             var finalReport = {
                 amReport: amReport,
