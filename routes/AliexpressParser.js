@@ -87,7 +87,12 @@ function parseHTML(html){
         final = final/arr.length;
         mean += final;
         element.price = final;
-        element.imageUrl = "https:" + element.imageUrl;
+        if(typeof element.imageUrl === 'undefined'){
+            element.imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';
+        }
+        else{
+            element.imageUrl = "https:" + element.imageUrl;
+        }
         element.itemUrl = "https:" + element.itemUrl;
 
         var nameT = element.name;
