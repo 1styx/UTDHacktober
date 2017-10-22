@@ -40,7 +40,6 @@ export default class Home extends Component {
     }
 
     render() {
-
         return (
             <div>
                 {this.state.redirectComponent}
