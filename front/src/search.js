@@ -3,6 +3,18 @@ import {zip} from './util';
 import Navbar from './navbar';
 import axios from 'axios';
 
+function getEvalColor(evalStr) {
+    var evalColor = 'light';
+    if (evalStr === 'Poor') {
+        evalColor = 'danger';
+    } else if (evalStr === 'OK') {
+        evalColor = 'warning';
+    } else {
+        evalColor = 'success';
+    }
+    return evalColor;
+}
+
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
@@ -85,23 +97,18 @@ export default class SearchResults extends Component {
                 </div>
             );
         } else {
-            var evalColor = 'bg-light';
-            if (product.ourEval === 'Poor') {
-                evalColor = 'bg-danger';
-            } else if (product.ourEval === 'OK') {
-                evalColor = 'bg-warning';
-            } else {
-                evalColor = 'bg-success';
+            var evalColor = 'list-group-item-' + getEvalColor(product.ourEval);
+            var extraStyle = {};
+            if (product.ourEval === 'Best') {
+                extraStyle = {borderColor: '#DAA520'};
             }
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
-                    <div className="card-block">
-                        <div className={evalColor + ' text-white text-center p-3 mb-3'}>
-                            <h3>{product.ourEval}</h3>
-                        </div>
-                        <ul>
-                            <li>{'Profit $: ' + product.rawProfit}</li>
-                            <li>{'Profit %: ' + product.percentProfit}</li>
+                    <div className="card-block d-flex align-items-center">
+                        <ul className="list-group">
+                            <li className={"list-group-item flex-column align-items-center " + evalColor}>{product.ourEval}</li>
+                            <li className="list-group-item">{'Average Savings: $' + product.rawProfit}</li>
+                            <li className="list-group-item">{'Percent Savings: ' + product.percentProfit + '%'}</li>
                         </ul>
                     </div>
                 </div>
@@ -132,72 +139,73 @@ export default class SearchResults extends Component {
         var display = null;
         if (Object.keys(this.state).length > 0) {
             if (this.state.couldSearch) {
+                var evalColor = 'list-group-item-' + getEvalColor(this.state.analysis.ourEval);
                 display = (
                         <div className='container'>
-                            <div className="card rounded-0">
-                                <div className="card-block">
-                                <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
-                                <ul className="card-text">
-                                    <li>{'Alibaba - Average Profit Margin $: ' + this.state.analysis.avgAliProfitMarginRaw}</li>
-                                    <li>{'Alibaba - Average Profit Margin %: ' + this.state.analysis.avgAliProfitMarginPercent}</li>
-                                    <li>{'Amazon - Average Profit Margin $: ' + this.state.analysis.avgAmaProfitMarginRaw}</li>
-                                    <li>{'Amazon - Average Profit Margin %: ' + this.state.analysis.avgAmaProfitMarginPercent}</li>
-                                    <li>{'Min Price: ' + this.state.analysis.minPrice}</li>
-                                    <li>{'Max Price: ' + this.state.analysis.maxPrice}</li>
-                                    <li>
-                                        Alibaba Analytics
-                                        <ul>
-                                            <li>{'Average Price: ' + this.state.aliAnalysis.mean}</li>
-                                            <li>{'Median Price: ' + this.state.aliAnalysis.median}</li>
-                                            <li>{'Min Price: ' + this.state.aliAnalysis.min}</li>
-                                            <li>{'Max Price: ' + this.state.aliAnalysis.max}</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        Amazon Analytics
-                                        <ul>
-                                            <li>{'Average Price: ' + this.state.amazonAnalysis.mean}</li>
-                                            <li>{'Median Price: ' + this.state.amazonAnalysis.median}</li>
-                                            <li>{'Min Price: ' + this.state.amazonAnalysis.min}</li>
-                                            <li>{'Max Price: ' + this.state.amazonAnalysis.max}</li>
-                                        </ul>
-                                    </li>
-                                    <li>{'Overall Evaluation: ' + this.state.analysis.ourEval}</li>
-                                </ul>
+                            <div className="row no-gutters">
+                                <div className='col-3'>
+                                    <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                        <div className="card-block">
+                                            <h4>Alibaba Products</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-6'>
+                                    <div className="card rounded-0 bg-info text-white text-center" style={{height : '100%'}}>
+                                        <div className="card-block">
+                                            <h4>{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-3'>
+                                    <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                        <div className="card-block">
+                                            <h4>Amazon Products</h4>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <div className="row no-gutters">
+                                <div className='col-3'>
+                                    <div className="card rounded-0" style={{height : '100%'}}>
+                                        <div className="card-block d-flex align-items-center">
+                                            <ul className="list-group">
+                                                <li className="list-group-item">{'Average Savings: $' + this.state.analysis.avgAliProfitMarginRaw}</li>
+                                                <li className="list-group-item">{'Percent Savings: ' + this.state.analysis.avgAliProfitMarginPercent + '%'}</li>
+                                                <li className="list-group-item">{'Average Price: $' + this.state.aliAnalysis.mean}</li>
+                                                <li className="list-group-item">{'Median Price: $' + this.state.aliAnalysis.median}</li>
+                                                <li className="list-group-item">{'Min Price: $' + this.state.aliAnalysis.min}</li>
+                                                <li className="list-group-item">{'Max Price: $' + this.state.aliAnalysis.max}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-6'>
+                                    <div className="card rounded-0 align-items-center" style={{height : '100%'}}>
+                                        <div className="card-block d-flex align-items-center w-100 h-100">
+                                            <ul className="list-group w-100 h-100">
+                                                <li className={"list-group-item align-items-center justify-content-center h-100 " + evalColor} style={{fontSize: 60}}>{this.state.analysis.ourEval}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='col-3'>
+                                    <div className="card rounded-0" style={{height : '100%'}}>
+                                        <div className="card-block d-flex align-items-center">
+                                            <ul className="list-group">
+                                                <li className="list-group-item">{'Average Savings: $' + this.state.analysis.avgAmaProfitMarginRaw}</li>
+                                                <li className="list-group-item">{'Percent Savings: ' + this.state.analysis.avgAmaProfitMarginPercent + '%'}</li>
+                                                <li className="list-group-item">{'Average Price: $' + this.state.amazonAnalysis.mean}</li>
+                                                <li className="list-group-item">{'Median Price: $' + this.state.amazonAnalysis.median}</li>
+                                                <li className="list-group-item">{'Min Price: $' + this.state.amazonAnalysis.min}</li>
+                                                <li className="list-group-item">{'Max Price: $' + this.state.amazonAnalysis.max}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {this.state.zippedResults.map(this.createProductRow)}
                         </div>
-                        <div className="row no-gutters">
-                            <div className='col-3'>
-                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
-                                    <div className="card-block">
-                                        <h4>Alibaba Products</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='col-3'>
-                                <div className="card rounded-0 bg-info text-white text-center" style={{height : '100%'}}>
-                                    <div className="card-block">
-                                        <h4>Alibaba Analysis</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='col-3'>
-                                <div className="card rounded-0 bg-info text-white text-center" style={{height : '100%'}}>
-                                    <div className="card-block">
-                                        <h4>Amazon Analysis</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='col-3'>
-                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
-                                    <div className="card-block">
-                                        <h4>Amazon Products</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {this.state.zippedResults.map(this.createProductRow)}
-                    </div>
                 );
             } else {
                 display = (
