@@ -5,7 +5,7 @@ export default class Home extends Component {
     render() {
         return (
             <div className='col'>
-                <Navbar pageName='Home' parentUrl={this.props.match.url} />
+                <Navbar pageName='About' parentUrl={this.props.match.url} />
                 <div className='container' style={{maxWidth: 800}}>
                     <h2>
                         Welcome to MotherShip!

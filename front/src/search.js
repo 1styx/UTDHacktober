@@ -161,7 +161,7 @@ export default class SearchResults extends Component {
         }
         return (
             <div>
-                <Navbar name='Search' parentUrl={this.props.match.url} />
+                <Navbar pageName='Search' parentUrl={this.props.match.url} />
                 {display}
             </div>
         );
