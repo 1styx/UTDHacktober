@@ -5,7 +5,7 @@ import Navbar from './navbar';
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
-        /*
+        
         axios.get('/searchResults', {
                 params: {
                     query: this.props.match.params.query
@@ -13,16 +13,18 @@ export default class SearchResults extends Component {
             })
             .then(function(response) {
                 console.log(response);
-                this.state.aliResults = response['data']['alibabaResults'];
-                this.state.amazonResults = response['data']['amazonResults'];
+                this.state.aliResults = response.data.aliReport.aliInfo;
+                this.state.aliAnalysis = response.data.aliReport.aliStats;
+                this.state.amazonResults = response.data.amReport.amInfo;
+                this.state.amazonAnalysis = response.data.amReport.amStats;
                 this.state.zippedResults = zip(this.state.aliResults, this.state.amazonResults);
-                this.state.analysis = response['data']['analysis'];
+                this.state.analysis = response.data.analProd;
             })
             .catch(function(error) {
                 console.log(error);
             }
         );
-        */
+        /*
         this.state = {zippedResults: [[{name: 'aliproduct1'}, {name: 'amaproduct1'}],
             [{name: 'aliproduct2'}, {name: 'amaproduct2'}],
             [{name: 'aliproduct3'}, {name: 'amaproduct3'}]],
@@ -135,7 +137,8 @@ export default class SearchResults extends Component {
                 }
             }];
         this.state.zippedResults = zip(this.state.aliResults, this.state.amazonResults);
-
+        */
+        
         this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
         this.createProductInfoCard = this.createProductInfoCard.bind(this);
         this.createProductRow = this.createProductRow.bind(this);
@@ -218,19 +221,19 @@ export default class SearchResults extends Component {
                                 <li>
                                     Alibaba Analytics
                                     <ul>
-                                        <li>{'Average Price: ' + this.state.analysis.avgPriceAlibaba}</li>
-                                        <li>{'Median Price: ' + this.state.analysis.medPriceAlibaba}</li>
-                                        <li>{'Min Price: ' + this.state.analysis.minPriceAlibaba}</li>
-                                        <li>{'Max Price: ' + this.state.analysis.maxPriceAlibaba}</li>
+                                        <li>{'Average Price: ' + this.state.aliAnalysis.mean}</li>
+                                        <li>{'Median Price: ' + this.state.aliAnalysis.median}</li>
+                                        <li>{'Min Price: ' + this.state.aliAnalysis.min}</li>
+                                        <li>{'Max Price: ' + this.state.aliAnalysis.max}</li>
                                     </ul>
                                 </li>
                                 <li>
                                     Amazon Analytics
                                     <ul>
-                                        <li>{'Average Price: ' + this.state.analysis.avgPriceAmazon}</li>
-                                        <li>{'Median Price: ' + this.state.analysis.medPriceAmazon}</li>
-                                        <li>{'Min Price: ' + this.state.analysis.minPriceAmazon}</li>
-                                        <li>{'Max Price: ' + this.state.analysis.maxPriceAmazon}</li>
+                                        <li>{'Average Price: ' + this.state.amazonAnalysis.mean}</li>
+                                        <li>{'Median Price: ' + this.state.amazonAnalysis.median}</li>
+                                        <li>{'Min Price: ' + this.state.amazonAnalysis.min}</li>
+                                        <li>{'Max Price: ' + this.state.amazonAnalysis.max}</li>
                                     </ul>
                                 </li>
                                 <li>{'Overall Evaluation: ' + this.state.analysis.ourEval}</li>
