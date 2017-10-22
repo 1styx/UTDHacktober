@@ -35,7 +35,7 @@ export default class SearchResults extends Component {
                         couldSearch: true
                 });
             })
-            .catch(function(error) {
+            .catch(error => {
                 console.log('Failed search: ' + error);
 
                 this.setState({couldSearch: false});
@@ -59,7 +59,7 @@ export default class SearchResults extends Component {
                         <img className="card-img-top img-fluid" src={product.pic} alt='No Image Available' />
                         <h4 className="card-title">{product.name}</h4>
                         <p className="card-text">{'$' + product.price}</p>
-                        <a href={product.link}>Go to Product Page</a>
+                        <a target='blank' href={product.link}>Go to Product Page</a>
                     </div>
                 </div>
             );
@@ -150,9 +150,9 @@ export default class SearchResults extends Component {
             } else {
                 display = (
                         <div className='container'>
-                            <div className="card">
+                            <div className="card text-center">
                                 <div className="card-block">
-                                    <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
+                                    <h4 className="card-title">Cannot Load Search. Please Try Again Later.</h4>
                                 </div>
                             </div>
                         </div>
