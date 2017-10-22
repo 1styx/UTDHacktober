@@ -64,6 +64,10 @@ function parseHTML(html){
     var listFirstTen = retList.slice(0, 10);
     var mean = 0;
     var finalList = [];
+
+    var max = listFirstTen[0].price;
+    var min = listFirstTen[0].price;
+
     listFirstTen.forEach(function(element) {
         var arr = element.price.match(/(\d[\d\.]*)/g);
         var final = 0.0;
@@ -82,6 +86,14 @@ function parseHTML(html){
             price: element.price,
             pic: element.imageUrl
         }
+
+        if(thisInfo.price > max) {
+            max = thisInfo.price;
+        }
+        if(thisInfo.price < min) {
+            min = thisInfo.price;
+        }
+
         finalList.push(thisInfo);
 
     });
@@ -96,7 +108,9 @@ function parseHTML(html){
     median = ( parseInt(tmpList[tmpList.length / 2].price) + parseInt(tmpList[(tmpList.length / 2) + 1].price)/2);
     var stats = {
         mean: mean,
-        median: median
+        median: median,
+        max: max,
+        min: min
     }
     var report = {
         aliStats: stats,
