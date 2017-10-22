@@ -48,7 +48,7 @@ function processAmazonResults(results) {
             titleString = result.ItemAttributes[0].Title[0];
         }
 
-        console.log(result);
+        //console.log(result);
         var thisInfo = {
             name: titleString,
             link: result.DetailPageURL[0],

@@ -61,7 +61,16 @@ function parseHTML(html){
     //console.log(list1);
     //console.log(list2);
     var retList = list1.items.concat(list2.items);
+    if(retList.length == 0){
+        var report = {
+            aliStats: {},
+            aliInfo: []
+        }
+        console.log("here");
+        return report;
+    }
     var listFirstTen = retList.slice(0, 10);
+
     var mean = 0;
     var finalList = [];
 
@@ -110,15 +119,22 @@ function parseHTML(html){
         finalList.push(thisInfo);
 
     });
-    mean = mean/listFirstTen.length;
-    var tmpList = listFirstTen;
+    mean = mean/finalList.length;
+    var tmpList = finalList;
     var median = 0;
 
     tmpList.sort(function(a, b) {
             return parseFloat(a.price) - parseFloat(b.price);
     });
 
-    median = ( parseInt(tmpList[tmpList.length / 2].price) + parseInt(tmpList[(tmpList.length / 2) + 1].price)/2);
+    console.log(tmpList);
+    var halfIndex = Math.floor(tmpList.length/2);
+    if(tmpList.length % 2) {
+        median = parseInt(tmpList[halfIndex].price);
+    } else {
+        median = (parseInt(tmpList[halfIndex-1].price) + parseInt(tmpList[halfIndex].price)) / 2.0;
+    }
+
     var stats = {
         mean: mean,
         median: median,
