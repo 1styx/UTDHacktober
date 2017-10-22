@@ -82,7 +82,7 @@ function processAmazonResults(results) {
 
 /* GET amazon search results. */
 router.get('/', function(req, res, next) {
-    console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
+    //console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
 
 /*
     client.itemSearch({
@@ -122,7 +122,7 @@ router.get('/', function(req, res, next) {
 
     Promise.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
         .then(function(values) {
-            console.log(values);
+            //console.log(values);
             //console.log('Made it');
             //console.log(Object.keys(values));
 
