@@ -59,10 +59,13 @@ export default class SearchResults extends Component {
                 });
             })
             .catch(error => {
-                console.log('Failed search: ' + error);
-                console.error('Dummy');
-
-                this.setState({couldSearch: false});
+                console.log(error);
+                this.setState(
+                        {
+                            couldSearch: false,
+                            errorCode: error.response.status
+                        }
+                    );
             });
 
         this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
@@ -208,11 +211,18 @@ export default class SearchResults extends Component {
                         </div>
                 );
             } else {
+                var message = 'An Error Occurred. Please Try Again Later.';
+                if (this.state.errorCode === 501) {
+                    message = 'You Are Accessing The API Too Quickly. Please Try Again Later.';
+                } else if (this.state.errorCode === 502) {
+                    message = 'Not Enough Search Results. Please Try A Different Search.';
+                }
+                
                 display = (
                         <div className='container'>
                             <div className="card text-center rounded-0">
                                 <div className="card-block">
-                                    <h4 className="card-title">Cannot Load Search. Please Try Again Later.</h4>
+                                    <h4 className="card-title">{message}</h4>
                                 </div>
                             </div>
                         </div>
