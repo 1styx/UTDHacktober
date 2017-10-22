@@ -118,25 +118,24 @@ router.get('/', function(req, res, next) {
                 if(aliReport.aliStats.min < amReport.amStats.min) {
                     totalMin = aliReport.aliStats.min;
                     var i = 0;
-                    while(aliReport[i].aliInfo.price != totalMin && i < aliReport.lenght){
+                    while(i < aliReport.length && aliReport.aliInfo[i].price != totalMin){
                         i++;
                     }
-                    aliReport[i].aliInfo.ourEval = "Best";
+                    aliReport.aliInfo[i].ourEval = "Best";
                 }
                 else{
                     totalMin = amReport.amStats.min;
                     var i = 0;
-                    while(amReport[i].amInfo.price != totalMin && i < amReport.lenght){
+                    while(i < amReport.length && amReport.amInfo[i].price != totalMin){
                         i++;
                     }
-                    amReport[i].amInfo.ourEval = "Best";
+                    amReport.amInfo[i].ourEval = "Best";
+
                 }
                 var totalMax = amReport.amStats.max;
                 if(aliReport.aliStats.max > totalMax) {
                     totalMax = aliReport.aliStats.max;
                 }
-
-
 
                 amReport.amInfo.forEach(function(info) {
 
@@ -147,12 +146,11 @@ router.get('/', function(req, res, next) {
                         info.ourEval = "Good";
                     }
                     else if(info.percentProfit > 10 && info.ourEval != "Best"){
-                        info.ourEval = "Okay";
+                        info.ourEval = "OK";
                     }
                     else if(info.ourEval != "Best"){
                         info.ourEval = "Poor";
                     }
-
                 });
 
                 aliReport.aliInfo.forEach(function(info) {
@@ -164,7 +162,7 @@ router.get('/', function(req, res, next) {
                         info.ourEval = "Good";
                     }
                     else if(info.percentProfit > 10 && info.ourEval != "Best"){
-                        info.ourEval = "Okay";
+                        info.ourEval = "OK";
                     }
                     else if(info.ourEval != "Best"){
                         info.ourEval = "Poor";
