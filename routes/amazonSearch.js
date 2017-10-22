@@ -1,4 +1,4 @@
-
+import {findAliItems, replaceAll} from './AliexpressParser'
 var express = require('express');
 var router = express.Router();
 var amazon = require('amazon-product-api');
