@@ -68,6 +68,8 @@ function parseHTML(html){
     var max = 0;
     var min = Number.MAX_SAFE_INTEGER;
 
+
+
     listFirstTen.forEach(function(element) {
         var arr = element.price.match(/(\d[\d\.]*)/g);
         var final = 0.0;
@@ -79,6 +81,16 @@ function parseHTML(html){
         element.price = final;
         element.imageUrl = "https:" + element.imageUrl;
         element.itemUrl = "https:" + element.itemUrl;
+
+        var nameT = element.name;
+        if(nameT === undefined){
+            var itemUrlCopy = element.itemUrl;
+            var pos1 = itemUrlCopy.lastIndexOf('item/');
+            var pos2 = itemUrlCopy.indexOf('/', pos1+5);
+            itemUrlCopy = itemUrlCopy.substring(pos1+5, pos2);
+            itemUrlCopy = itemUrlCopy.replace(/-/g, ' ');
+            element.name = itemUrlCopy;
+        }
 
         var thisInfo = {
             name: element.name,
@@ -93,6 +105,7 @@ function parseHTML(html){
         if(thisInfo.price < min) {
             min = thisInfo.price;
         }
+
 
         finalList.push(thisInfo);
 
