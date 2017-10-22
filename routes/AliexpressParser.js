@@ -77,8 +77,8 @@ function parseHTML(html){
     var min = Number.MAX_SAFE_INTEGER;
 
 
-
     listFirstTen.forEach(function(element) {
+        element.price = replaceAll(element.price, ',', '');
         var arr = element.price.match(/(\d[\d\.]*)/g);
         var final = 0.0;
         for(var i = 0; i < arr.length; i++){
@@ -141,7 +141,7 @@ function parseHTML(html){
         mean: mean,
         median: median,
         max: max,
-        min: min
+        min: min,
     }
     var report = {
         aliStats: stats,
