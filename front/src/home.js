@@ -8,17 +8,17 @@ export default class Home extends Component {
                 <Navbar pageName='Home' parentUrl={this.props.match.url} />
                 <div className='container' style={{maxWidth: 800}}>
                     <h2>
-                        Welcome to DropShipComparator!
+                        Welcome to MotherShip!
                     </h2>
                     <p className='text-muted'>
                     	We search the popular online shopping sites Amazon
-                    	and AliExpress to help you get the best prices for 
+                    	and AliExpress to help you get the best prices for
                     	everything you buy.
                     </p>
                     <h4>
                     	AliExpress
                     </h4>
-                    
+
                     <ul>
                     	<li className='text-muted'>
 	                    	We were unable to access the API for AliExpress,
@@ -39,7 +39,7 @@ export default class Home extends Component {
 	                    	from Amazon for the products in question.
 	                    </li>
 	                    <li className='text-muted'>
-	                    	* Explain how the algorithm works for 
+	                    	* Explain how the algorithm works for
 	                    	the Amazon data *
 	                    </li>
                     </ul>

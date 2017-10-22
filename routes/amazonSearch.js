@@ -183,17 +183,39 @@ router.get('/', function(req, res, next) {
                 ourEval = 'Poor'
             }
 
+            amReport.amStats.max = amReport.amStats.max.toFixed(2);
+            amReport.amStats.min = amReport.amStats.min.toFixed(2);
+            amReport.amStats.median = amReport.amStats.median.toFixed(2);
+            amReport.amStats.mean = amReport.amStats.mean.toFixed(2);
+            amReport.amStats.rawProfit = amReport.amStats.rawProfit.toFixed(2);
+            amReport.amStats.percentProfit = amReport.amStats.percentProfit.toFixed(2);
+
+            amReport.amInfo.forEach(function(info) {
+                info.price = info.price.toFixed(2);
+            });
+
+            aliReport.aliStats.max = aliReport.aliStats.max.toFixed(2);
+            aliReport.aliStats.min = aliReport.aliStats.min.toFixed(2);
+            aliReport.aliStats.median = aliReport.aliStats.median.toFixed(2);
+            aliReport.aliStats.mean = aliReport.aliStats.mean.toFixed(2);
+            aliReport.aliStats.rawProfit = aliReport.aliStats.rawProfit.toFixed(2);
+            aliReport.aliStats.percentProfit = aliReport.aliStats.percentProfit.toFixed(2);
+
+            aliReport.aliInfo.forEach(function(info) {
+                info.price = info.price.toFixed(2);
+            });
+
             var prodAnal = {
                 ali: {
-                    rawProfit: aliRawProfit,
-                    percentProfit: aliPercentProfit
+                    rawProfit: aliRawProfit.toFixed(2),
+                    percentProfit: aliPercentProfit.toFixed(2)
                 },
                 am: {
-                    rawProfit: amRawProfit,
-                    percentProfit: amPercentProfit
+                    rawProfit: amRawProfit.toFixed(2),
+                    percentProfit: amPercentProfit.toFixed(2)
                 },
-                totalMin: totalMin,
-                totalMax: totalMax,
+                totalMin: totalMin.toFixed(2),
+                totalMax: totalMax.toFixed(2),
                 searchTerm: req.query.search,
                 ourEval: ourEval
             }
