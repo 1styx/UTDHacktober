@@ -119,7 +119,6 @@ function parseHTML(html){
             min = thisInfo.price;
         }
 
-
         finalList.push(thisInfo);
 
     });

@@ -111,6 +111,7 @@ router.get('/', function(req, res, next) {
             var amReport = processAmazonResults(amResult);
             var aliReport = ali.parseHTML(aliResult);
 
+
             var totalMin = amReport.amStats.min;
             if(aliReport.aliStats.min < totalMin) {
                 totalMin = aliReport.aliStats.min;
@@ -122,8 +123,8 @@ router.get('/', function(req, res, next) {
 
             amReport.amInfo.forEach(function(info) {
 
-                info.rawProfit = aliReport.aliStats.mean - info.price;
-                info.percentProfit = (1 - (info.price / aliReport.aliStats.mean)) * 100;
+                info.rawProfit = (aliReport.aliStats.mean - info.price).toFixed(2);
+                info.percentProfit = ((1 - (info.price / aliReport.aliStats.mean)) * 100).toFixed(2);
 
                 if(info.percentProfit > 20) {
                     info.ourEval = "Good";
@@ -136,8 +137,8 @@ router.get('/', function(req, res, next) {
 
             aliReport.aliInfo.forEach(function(info) {
 
-                info.rawProfit = amReport.amStats.mean - info.price;
-                info.percentProfit = (1 - (info.price / amReport.amStats.mean)) * 100;
+                info.rawProfit = (amReport.amStats.mean - info.price).toFixed(2);
+                info.percentProfit = ((1 - (info.price / amReport.amStats.mean)) * 100).toFixed(2);
 
                 if(info.percentProfit > 20) {
                     info.ourEval = "Good";
@@ -152,6 +153,13 @@ router.get('/', function(req, res, next) {
             var amPercentProfit = (1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100;
             var aliRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
             var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
+            /*console.log("before: " + amRawProfit)
+            amRawProfit = amRawProfit.toFixed(2)
+            console.log("after: " + amRawProfit)
+
+            amPercentProfit = amPercentProfit.toFixed(2)
+            aliRawProfit = aliRawProfit.toFixed(2)
+            aliPercentProfit = aliPercentProfit.toFixed(2)*/
 
             var ourEval = '';
             if(aliPercentProfit > 0.2) {

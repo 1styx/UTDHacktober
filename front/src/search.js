@@ -6,7 +6,7 @@ import axios from 'axios';
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {};
         axios.get('/amazonSearch', {
                 params: {
@@ -34,13 +34,25 @@ export default class SearchResults extends Component {
                         },
                         couldSearch: true
                 });
+
+                axios.post('/mongo', {
+                    search: this.state.analysis.query,
+                    profit: this.state.analysis.avgAliProfitMarginPercent
+                })
+                .then(function(response) {
+                    console.log(response);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
             })
             .catch(error => {
                 console.log('Failed search: ' + error);
+                console.error('Dummy');
 
                 this.setState({couldSearch: false});
             });
-        
+
         this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
         this.createProductInfoCard = this.createProductInfoCard.bind(this);
         this.createProductRow = this.createProductRow.bind(this);
@@ -73,6 +85,7 @@ export default class SearchResults extends Component {
                 </div>
             );
         } else {
+
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
                     <div className="card-block">
