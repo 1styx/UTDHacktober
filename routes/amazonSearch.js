@@ -194,8 +194,6 @@ router.get('/', function(req, res, next) {
                 ourEval = 'Poor'
             }
 
-<<<<<<< HEAD
-=======
             amReport.amStats.max = amReport.amStats.max.toFixed(2);
             amReport.amStats.min = amReport.amStats.min.toFixed(2);
             amReport.amStats.median = amReport.amStats.median.toFixed(2);
@@ -214,7 +212,6 @@ router.get('/', function(req, res, next) {
                 info.price = info.price.toFixed(2);
             });
 
->>>>>>> 20c3939d66030b753a6f2584c44f34ff5900baef
             var prodAnal = {
                 ali: {
                     rawProfit: aliRawProfit,
@@ -240,11 +237,7 @@ router.get('/', function(req, res, next) {
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
-<<<<<<< HEAD
             res.status(500).send('Could not access results at this time!');
-=======
-            console.error(error.stack);
->>>>>>> 20c3939d66030b753a6f2584c44f34ff5900baef
         });
 
 

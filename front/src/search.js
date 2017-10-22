@@ -21,7 +21,7 @@ export default class SearchResults extends Component {
                         amazonResults: response.data.amReport.amInfo,
                         amazonAnalysis: response.data.amReport.amStats,
                         zippedResults: zip(response.data.aliReport.aliInfo, response.data.amReport.amInfo),
-                        analysis: 
+                        analysis:
                         {
                             query: response.data.prodAnal.searchTerm,
                             avgAliProfitMarginRaw: response.data.prodAnal.ali.rawProfit,
@@ -31,11 +31,14 @@ export default class SearchResults extends Component {
                             minPrice: response.data.prodAnal.totalMin,
                             maxPrice: response.data.prodAnal.totalMax,
                             ourEval: response.data.prodAnal.ourEval
-                        }
+                        },
+                        couldSearch: true
                 });
             })
             .catch(function(error) {
                 console.log('Failed search: ' + error);
+
+                this.setState({couldSearch: false});
             });
         
         this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
@@ -106,43 +109,55 @@ export default class SearchResults extends Component {
     render() {
         var display = null;
         if (Object.keys(this.state).length > 0) {
-            display = (
-                    <div className='container'>
-                        <div className="card">
-                            <div className="card-block">
-                            <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
-                            <ul className="card-text">
-                                <li>{'Alibaba - Average Profit Margin $: ' + this.state.analysis.avgAliProfitMarginRaw}</li>
-                                <li>{'Alibaba - Average Profit Margin %: ' + this.state.analysis.avgAliProfitMarginPercent}</li>
-                                <li>{'Amazon - Average Profit Margin $: ' + this.state.analysis.avgAmaProfitMarginRaw}</li>
-                                <li>{'Amazon - Average Profit Margin %: ' + this.state.analysis.avgAmaProfitMarginPercent}</li>
-                                <li>{'Min Price: ' + this.state.analysis.minPrice}</li>
-                                <li>{'Max Price: ' + this.state.analysis.maxPrice}</li>
-                                <li>
-                                    Alibaba Analytics
-                                    <ul>
-                                        <li>{'Average Price: ' + this.state.aliAnalysis.mean}</li>
-                                        <li>{'Median Price: ' + this.state.aliAnalysis.median}</li>
-                                        <li>{'Min Price: ' + this.state.aliAnalysis.min}</li>
-                                        <li>{'Max Price: ' + this.state.aliAnalysis.max}</li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    Amazon Analytics
-                                    <ul>
-                                        <li>{'Average Price: ' + this.state.amazonAnalysis.mean}</li>
-                                        <li>{'Median Price: ' + this.state.amazonAnalysis.median}</li>
-                                        <li>{'Min Price: ' + this.state.amazonAnalysis.min}</li>
-                                        <li>{'Max Price: ' + this.state.amazonAnalysis.max}</li>
-                                    </ul>
-                                </li>
-                                <li>{'Overall Evaluation: ' + this.state.analysis.ourEval}</li>
-                            </ul>
+            if (this.state.couldSearch) {
+                display = (
+                        <div className='container'>
+                            <div className="card">
+                                <div className="card-block">
+                                <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
+                                <ul className="card-text">
+                                    <li>{'Alibaba - Average Profit Margin $: ' + this.state.analysis.avgAliProfitMarginRaw}</li>
+                                    <li>{'Alibaba - Average Profit Margin %: ' + this.state.analysis.avgAliProfitMarginPercent}</li>
+                                    <li>{'Amazon - Average Profit Margin $: ' + this.state.analysis.avgAmaProfitMarginRaw}</li>
+                                    <li>{'Amazon - Average Profit Margin %: ' + this.state.analysis.avgAmaProfitMarginPercent}</li>
+                                    <li>{'Min Price: ' + this.state.analysis.minPrice}</li>
+                                    <li>{'Max Price: ' + this.state.analysis.maxPrice}</li>
+                                    <li>
+                                        Alibaba Analytics
+                                        <ul>
+                                            <li>{'Average Price: ' + this.state.aliAnalysis.mean}</li>
+                                            <li>{'Median Price: ' + this.state.aliAnalysis.median}</li>
+                                            <li>{'Min Price: ' + this.state.aliAnalysis.min}</li>
+                                            <li>{'Max Price: ' + this.state.aliAnalysis.max}</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        Amazon Analytics
+                                        <ul>
+                                            <li>{'Average Price: ' + this.state.amazonAnalysis.mean}</li>
+                                            <li>{'Median Price: ' + this.state.amazonAnalysis.median}</li>
+                                            <li>{'Min Price: ' + this.state.amazonAnalysis.min}</li>
+                                            <li>{'Max Price: ' + this.state.amazonAnalysis.max}</li>
+                                        </ul>
+                                    </li>
+                                    <li>{'Overall Evaluation: ' + this.state.analysis.ourEval}</li>
+                                </ul>
+                            </div>
                         </div>
+                        {this.state.zippedResults.map(this.createProductRow)}
                     </div>
-                    {this.state.zippedResults.map(this.createProductRow)}
-                </div>
-            );
+                );
+            } else {
+                display = (
+                        <div className='container'>
+                            <div className="card">
+                                <div className="card-block">
+                                    <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
+                                </div>
+                            </div>
+                        </div>
+                );
+            }
         }
         return (
             <div>
