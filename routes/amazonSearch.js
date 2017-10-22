@@ -20,6 +20,13 @@ function processAmazonResults(results) {
         }
     );
 
+    if(results.length == 0){
+        var report = {
+            aliStats: {},
+            aliInfo: []
+        }
+        return report;
+    }
     var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
 
@@ -95,50 +102,10 @@ function processAmazonResults(results) {
 
 /* GET amazon search results. */
 router.get('/', function(req, res, next) {
-    //console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
-
-/*
-    client.itemSearch({
-        searchIndex: 'All',
-        keywords: req.query.search,
-        responseGroup: 'Medium',
-        itemPage: 1
-    })
-    .then(function(results) {
-        var report = processAmazonResults(results);
-        //console.log(report);
-        res.send(report);
-    })
-    .catch(function(err) {
-        console.log('In Amazon query failure');
-        console.log(err);
-        err.Error.forEach(function(error) {
-            console.log(error);
-        });
-    });
-*/
-
-/*
-    axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)
-        .then(function(response) {
-            console.log(response);
-            var list = ali.parseHTML(response.data);
-            console.log(list);
-
-            res.send(list);
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
-*/
-
 
     Promise.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
         .then(function(values) {
-            //console.log(values);
-            //console.log('Made it');
-            //console.log(Object.keys(values));
-
+            
             var amResult = values[0];
             var aliResult = values[1].data;
             var amReport = processAmazonResults(amResult);

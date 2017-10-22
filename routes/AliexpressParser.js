@@ -66,7 +66,6 @@ function parseHTML(html){
             aliStats: {},
             aliInfo: []
         }
-        console.log("here");
         return report;
     }
     var listFirstTen = retList.slice(0, 10);
@@ -127,7 +126,6 @@ function parseHTML(html){
             return parseFloat(a.price) - parseFloat(b.price);
     });
 
-    console.log(tmpList);
     var halfIndex = Math.floor(tmpList.length/2);
     if(tmpList.length % 2) {
         median = parseInt(tmpList[halfIndex].price);
