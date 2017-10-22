@@ -49,17 +49,17 @@ export default class SearchResults extends Component {
     createProductInfoCard(product) {
         if (product == null) {
             return (
-                <div className="card" style={{height : '100%'}}>
+                <div className="card card-inverse" style={{height : '100%', backgroundColor: '#333', borderColor: '#333'}}>
                 </div>
             );
         } else {
             return (
-                <div className="card" style={{height : '100%'}}>
+                <div className="card card-inverse" style={{height : '100%', backgroundColor: '#333', borderColor: '#333'}}>
+                    <a style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '100%'}} target='blank' href={product.link} />
                     <div className="card-block">
-                        <img className="card-img-top img-fluid" src={product.pic} alt='No Image Available' />
+                        <img className="card-img-top img-thumbnail mx-auto d-block mb-3" src={product.pic} alt='No Image Available' />
                         <h4 className="card-title">{product.name}</h4>
                         <p className="card-text">{'$' + product.price}</p>
-                        <a target='blank' href={product.link}>Go to Product Page</a>
                     </div>
                 </div>
             );
