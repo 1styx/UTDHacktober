@@ -1,7 +1,8 @@
 function findAliItems(stringSearch){
 
     var axios = require('axios');
-    axios.get('https://www.aliexpress.com/wholesale?SearchText='+stringSearch)
+    return axios.get('https://www.aliexpress.com/wholesale?SearchText='+stringSearch)
+    /*
       .then(function (response) {
 
         var list =  parseHTML(response.data);
@@ -11,12 +12,14 @@ function findAliItems(stringSearch){
       .catch(function (error) {
         console.log(error);
     });
+    */
 }
 function callBackParseHTML(data){
     parseHTML(data);
 }
 
 function replaceAll(str, find, replace) {
+    console.log('str: ' + str);
     return str.replace(new RegExp(find, 'g'), replace);
 }
 
@@ -96,9 +99,14 @@ function parseHTML(html){
         median: median
     }
     var report = {
-        stats: stats,
-        info: finalList
+        aliStats: stats,
+        aliInfo: finalList
     }
 
     return report;
+}
+
+module.exports = {
+    findAliItems,
+    parseHTML
 }

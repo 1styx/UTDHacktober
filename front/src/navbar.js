@@ -16,7 +16,7 @@ export default class Navbar extends Component {
                     }
                 ]
             };
-        
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.createNavLink = this.createNavLink.bind(this);
@@ -24,6 +24,20 @@ export default class Navbar extends Component {
 
     handleSubmit(event) {
         this.setState({shouldRedirect: true});
+
+        console.log('Searching: ' + this.state.search);
+        axios.get('/amazonSearch', {
+            params: {
+                search: this.state.search
+            }
+        })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(error) {
+                console.log('Client search erroring out: ' + error);
+            });
+
         event.preventDefault();
     }
 
@@ -40,15 +54,15 @@ export default class Navbar extends Component {
             return (<li key={index} className="nav-item"><a className="nav-link" href={curVal.link}>{curVal.name}</a></li>);
         }
     }
-    
+
     shouldComponentUpdate(nextProps, nextState) {
         return nextState.shouldRedirect;
     }
-    
+
     componentDidUpdate() {
         this.setState({shouldRedirect: false});
     }
-    
+
     render() {
         var redirectionDiv = null;
         if (this.state.shouldRedirect) {

@@ -1,7 +1,8 @@
-import {findAliItems, replaceAll} from './AliexpressParser'
 var express = require('express');
 var router = express.Router();
 var amazon = require('amazon-product-api');
+var ali = require('./AliexpressParser');
+var axios = require('axios');
 
 // Establish Amazon search abilities
 var client = amazon.createClient({
@@ -59,8 +60,8 @@ function processAmazonResults(results) {
     //console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
 
     var report = {
-        stats: stats,
-        info: retInfo
+        amStats: stats,
+        amInfo: retInfo
     }
 
     return report;
@@ -70,6 +71,7 @@ function processAmazonResults(results) {
 router.get('/', function(req, res, next) {
     console.log('Get at amazonSearch, Keys: ' + Object.keys(req.query) + ' Search: ' + req.query.search);
 
+/*
     client.itemSearch({
         searchIndex: 'All',
         keywords: req.query.search,
@@ -88,16 +90,33 @@ router.get('/', function(req, res, next) {
             console.log(error);
         });
     });
+*/
 
-    /*
-    Promises.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get()])
-        .then(values => {
-            console.log(values);
+/*
+    axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)
+        .then(function(response) {
+            console.log(response);
+            var list = ali.parseHTML(response.data);
+            console.log(list);
+
+            res.send(list);
         })
         .catch(function(error) {
             console.log(error);
         });
-    */
+*/
+
+
+    Promises.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
+        .then(function(values) {
+            console.log(values);
+
+            res.send(values);
+        })
+        .catch(function(error) {
+            console.log('Promises erroring out: ' + error);
+        });
+
 
 });
 
