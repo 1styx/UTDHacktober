@@ -33,17 +33,31 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/amazonSearch', amazonSearch);
 
+app.get('/mongo', function(req, res) {
+  db.searches.find({search: req.body.search}, function(err, docs) {
+    res.send(docs);
+  });
+});
+
 app.post('/mongo', function(req, res) {
-  console.log('We got request: ' + req.body);
-  console.log('With attribs: ' + Object.keys(req.body));
-  db.mycollection.find({search: req.body.search}).forEach(function (err, doc) {
-    if (!doc) {
-      // we visited all docs in the collection
-      console.log('Inserting...');
+  //console.log('We got request: ' + req.body);
+  //console.log('With attribs: ' + Object.keys(req.body));
+  //console.log('search: ' + req.body.search + ', profit: ' + req.body.profit);
+  var i = 0;
+  db.searches.find({search: req.body.search}, function(err, docs) {
+    //console.log(JSON.stringify(docs, null, 2));
+
+    if(docs.length === 0) {
+      //console.log('Inserting...');
       db.searches.insert({search: req.body.search, profit: req.body.profit});
     }
-    // doc is a document in the collection
-  })
+    else {
+      //console.log('Updating...');
+      db.searches.update({search: req.body.search}, {$set: {profit: req.body.profit}});
+    }
+
+    res.send('Successful entry');
+  });
 
 });
 
