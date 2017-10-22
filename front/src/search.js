@@ -29,8 +29,8 @@ export default class SearchResults extends Component {
                             avgAmaProfitMarginRaw: response.data.prodAnal.am.rawProfit,
                             avgAmaProfitMarginPercent: response.data.prodAnal.am.percentProfit,
                             minPrice: response.data.prodAnal.totalMin,
-                            maxPrice: response.data.prodAnal.totalMin,
-                            ourEval: 'ok'
+                            maxPrice: response.data.prodAnal.totalMax,
+                            ourEval: response.data.prodAnal.ourEval
                         }
                 });
             })
@@ -118,7 +118,6 @@ export default class SearchResults extends Component {
                                 <li>{'Amazon - Average Profit Margin %: ' + this.state.analysis.avgAmaProfitMarginPercent}</li>
                                 <li>{'Min Price: ' + this.state.analysis.minPrice}</li>
                                 <li>{'Max Price: ' + this.state.analysis.maxPrice}</li>
-                                <li>{'Evaluation: ' + this.state.analysis.ourEval}</li>
                                 <li>
                                     Alibaba Analytics
                                     <ul>

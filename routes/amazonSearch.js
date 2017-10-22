@@ -13,8 +13,13 @@ var client = amazon.createClient({
 
 function processAmazonResults(results) {
     console.log('In Amazon query success');
-    //console.log(results);
 
+    results = results.filter(
+        function(result) {
+            return typeof result.OfferSummary[0].LowestNewPrice[0].Amount !== 'undefined';
+        }
+    );
+    
     var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     //console.log('Starting max: ' + statMax + ', Starting min: ' + statMin);
@@ -32,7 +37,6 @@ function processAmazonResults(results) {
         console.log('Item link keys: ' + Object.keys(result.ItemLinks[0]) + ' Item attribs: ' + Object.keys(result.ItemAttributes[0]));
         console.log('Binding: ' + result.ItemAttributes[0].Binding + ' EAN: ' + result.ItemAttributes[0].EAN);
         */
-        //console.log(JSON.stringify(result, null, 2));
 
         var thisInfo = {
             name: result.ItemAttributes[0].Title[0],
@@ -55,22 +59,20 @@ function processAmazonResults(results) {
 
     });
 
-    var myLength = info.length;
-    //console.log('myLength: ' + myLength);
-
-    stats.mean = stats.mean / myLength;
+    stats.mean = stats.mean / (info.length);
 
     var retInfo = info;
 
     info.sort(function(a, b) {
         return parseFloat(a.price) - parseFloat(b.price);
     });
-
-    //console.log('Sorted info', info);
-
-    //console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
-    stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 2;
-    //console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
+    
+    var halfIndex = Math.floor(info.length/2);
+    if(info.length % 2) {
+        stats.median = parseInt(info[halfIndex].price);
+    } else {
+        stats.median = (parseInt(info[halfIndex-1].price) + parseInt(info[halfIndex].price)) / 2.0;
+    }
 
     var report = {
         amStats: stats,
