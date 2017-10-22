@@ -18,11 +18,23 @@ function getEvalColor(evalStr) {
 export default class SearchResults extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {};
+        
+        this.componentWillReceiveProps(this.props);
+
+        this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
+        this.createProductInfoCard = this.createProductInfoCard.bind(this);
+        this.createProductRow = this.createProductRow.bind(this);
+    }
+    
+    componentWillReceiveProps(nextProps) {
+        if (Object.keys(this.state).length > 0) {
+            this.setState({});
+        }
         axios.get('/amazonSearch', {
                 params: {
-                    search: this.props.match.params.query
+                    search: nextProps.match.params.query
                 }
             })
             .then(response => {
@@ -67,10 +79,6 @@ export default class SearchResults extends Component {
                         }
                     );
             });
-
-        this.createProductAnalysisCard = this.createProductAnalysisCard.bind(this);
-        this.createProductInfoCard = this.createProductInfoCard.bind(this);
-        this.createProductRow = this.createProductRow.bind(this);
     }
 
     createProductInfoCard(product) {
@@ -101,15 +109,15 @@ export default class SearchResults extends Component {
             );
         } else {
             var evalColor = 'list-group-item-' + getEvalColor(product.ourEval);
-            var extraStyle = {};
+            var textColor = '';
             if (product.ourEval === 'Best') {
-                extraStyle = {borderColor: '#DAA520'};
+                textColor= 'text-warning';
             }
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
                     <div className="card-block d-flex align-items-center">
                         <ul className="list-group">
-                            <li className={"list-group-item flex-column align-items-center " + evalColor}>{product.ourEval}</li>
+                            <li className={"list-group-item flex-column align-items-center " + evalColor + ' ' + textColor}>{product.ourEval}</li>
                             <li className="list-group-item">{'Average Savings: $' + product.rawProfit}</li>
                             <li className="list-group-item">{'Percent Savings: ' + product.percentProfit + '%'}</li>
                         </ul>
