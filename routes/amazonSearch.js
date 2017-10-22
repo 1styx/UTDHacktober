@@ -142,7 +142,7 @@ router.get('/', function(req, res, next) {
 
             amReport.amInfo.forEach(function(info) {
 
-                info.rawProfit = info.price - aliReport.aliStats.mean;
+                info.rawProfit = aliReport.aliStats.mean - info.price;
                 info.percentProfit = (1 - (info.price / aliReport.aliStats.mean)) * 100;
 
                 if(info.percentProfit > 20) {
@@ -156,7 +156,7 @@ router.get('/', function(req, res, next) {
 
             aliReport.aliInfo.forEach(function(info) {
 
-                info.rawProfit = info.price - amReport.amStats.mean;
+                info.rawProfit = amReport.amStats.mean - info.price;
                 info.percentProfit = (1 - (info.price / amReport.amStats.mean)) * 100;
 
                 if(info.percentProfit > 20) {
@@ -168,10 +168,18 @@ router.get('/', function(req, res, next) {
 
             });
 
-            var amRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
+            var amRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
             var amPercentProfit = (1 - (amReport.amStats.mean / aliReport.aliStats.mean)) * 100;
-            var aliRawProfit = aliReport.aliStats.mean - amReport.amStats.mean;
+            var aliRawProfit = amReport.amStats.mean - aliReport.aliStats.mean;
             var aliPercentProfit = (1 - (aliReport.aliStats.mean / amReport.amStats.mean)) * 100;
+
+            var ourEval = '';
+            if(aliPercentProfit > 0.2) {
+                ourEval = 'Good'
+            }
+            else {
+                ourEval = 'Poor'
+            }
 
             var prodAnal = {
                 ali: {
@@ -184,7 +192,8 @@ router.get('/', function(req, res, next) {
                 },
                 totalMin: totalMin,
                 totalMax: totalMax,
-                searchTerm: req.query.search
+                searchTerm: req.query.search,
+                ourEval: ourEval
             }
 
             var finalReport = {
