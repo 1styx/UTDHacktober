@@ -42,9 +42,11 @@ function processAmazonResults(results) {
     });
 
     var myLength = info.length;
-    console.log('myLength: ' + myLength);
+    //console.log('myLength: ' + myLength);
 
     stats.mean = stats.mean / (100 * myLength);
+
+    var retInfo = info;
 
     info.sort(function(a, b) {
         return parseFloat(a.price) - parseFloat(b.price);
@@ -52,13 +54,13 @@ function processAmazonResults(results) {
 
     //console.log('Sorted info', info);
 
-    console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
+    //console.log('Spot 1: ' + info[myLength / 2].price + ' Spot 2: ' + info[(myLength / 2) + 1].price);
     stats.median = ( parseInt(info[myLength / 2].price) + parseInt(info[(myLength / 2) + 1].price) ) / 200;
-    console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
+    //console.log('Mean: ' + stats.mean + ' Median: ' + stats.median);
 
     var report = {
         stats: stats,
-        info: info
+        info: retInfo
     }
 
     return report;
@@ -86,6 +88,16 @@ router.get('/', function(req, res, next) {
             console.log(error);
         });
     });
+
+    /*
+    Promises.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get()])
+        .then(values => {
+            console.log(values);
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    */
 
 });
 
