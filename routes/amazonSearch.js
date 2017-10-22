@@ -38,11 +38,22 @@ function processAmazonResults(results) {
         console.log('Binding: ' + result.ItemAttributes[0].Binding + ' EAN: ' + result.ItemAttributes[0].EAN);
         */
 
+        var picUrl = '../public/images/No_image_available.svg';
+        if(result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0] !== undefined) {
+            var picUrl = result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0];
+        }
+
+        var titleString = '';
+        if(result.ItemAttributes[0].Title[0] !== undefined) {
+            titleString = result.ItemAttributes[0].Title[0];
+        }
+
+        console.log(result);
         var thisInfo = {
-            name: result.ItemAttributes[0].Title[0],
+            name: titleString,
             link: result.DetailPageURL[0],
             price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100,
-            pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
+            pic: picUrl
         }
 
         if(thisInfo.price > stats.max) {
