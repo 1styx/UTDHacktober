@@ -49,12 +49,12 @@ export default class SearchResults extends Component {
     createProductInfoCard(product) {
         if (product == null) {
             return (
-                <div className="card card-inverse" style={{height : '100%', backgroundColor: '#333', borderColor: '#333'}}>
+                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#444'}}>
                 </div>
             );
         } else {
             return (
-                <div className="card card-inverse" style={{height : '100%', backgroundColor: '#333', borderColor: '#333'}}>
+                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#444'}}>
                     <a style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '100%'}} target='blank' href={product.link} />
                     <div className="card-block">
                         <img className="card-img-top img-thumbnail mx-auto d-block mb-3" src={product.pic} alt='No Image Available' />
@@ -69,12 +69,12 @@ export default class SearchResults extends Component {
     createProductAnalysisCard(product) {
         if (product == null) {
             return (
-                <div className="card" style={{height : '100%'}}>
+                <div className="card rounded-0" style={{height : '100%'}}>
                 </div>
             );
         } else {
             return (
-                <div className="card" style={{height : '100%'}}>
+                <div className="card rounded-0" style={{height : '100%'}}>
                     <div className="card-block">
                         <ul>
                             <li>{'Profit $: ' + product.rawProfit}</li>
@@ -112,7 +112,7 @@ export default class SearchResults extends Component {
             if (this.state.couldSearch) {
                 display = (
                         <div className='container'>
-                            <div className="card">
+                            <div className="card rounded-0">
                                 <div className="card-block">
                                 <h4 className="card-title">{'Product Analytics for "' + this.state.analysis.query + '"'}</h4>
                                 <ul className="card-text">
@@ -144,13 +144,43 @@ export default class SearchResults extends Component {
                                 </ul>
                             </div>
                         </div>
+                        <div className="row no-gutters">
+                            <div className='col-3'>
+                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                    <div className="card-block">
+                                        <h4>Alibaba Products</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-3'>
+                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                    <div className="card-block">
+                                        <h4>Alibaba Analysis</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-3'>
+                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                    <div className="card-block">
+                                        <h4>Amazon Analysis</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='col-3'>
+                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                    <div className="card-block">
+                                        <h4>Amazon Products</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {this.state.zippedResults.map(this.createProductRow)}
                     </div>
                 );
             } else {
                 display = (
                         <div className='container'>
-                            <div className="card text-center">
+                            <div className="card text-center rounded-0">
                                 <div className="card-block">
                                     <h4 className="card-title">Cannot Load Search. Please Try Again Later.</h4>
                                 </div>
