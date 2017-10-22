@@ -61,17 +61,17 @@ export default class SearchResults extends Component {
     createProductInfoCard(product) {
         if (product == null) {
             return (
-                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#444'}}>
+                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#222'}}>
                 </div>
             );
         } else {
             return (
-                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#444'}}>
+                <div className="card card-inverse rounded-0" style={{height : '100%', backgroundColor: '#444', borderColor: '#222'}}>
                     <a style={{position: 'absolute', top: 0, left: 0, height: '100%', width: '100%'}} target='blank' href={product.link} />
                     <div className="card-block">
                         <img className="card-img-top img-thumbnail mx-auto d-block mb-3" src={product.pic} alt='No Image Available' />
-                        <h4 className="card-title">{product.name}</h4>
-                        <p className="card-text">{'$' + product.price}</p>
+                        <p className="card-title">{product.name}</p>
+                        <h1 className="card-text">{'$' + product.price}</h1>
                     </div>
                 </div>
             );
@@ -85,14 +85,23 @@ export default class SearchResults extends Component {
                 </div>
             );
         } else {
-
+            var evalColor = 'bg-light';
+            if (product.ourEval === 'Poor') {
+                evalColor = 'bg-danger';
+            } else if (product.ourEval === 'OK') {
+                evalColor = 'bg-warning';
+            } else {
+                evalColor = 'bg-success';
+            }
             return (
                 <div className="card rounded-0" style={{height : '100%'}}>
                     <div className="card-block">
+                        <div className={evalColor + ' text-white text-center p-3 mb-3'}>
+                            <h3>{product.ourEval}</h3>
+                        </div>
                         <ul>
                             <li>{'Profit $: ' + product.rawProfit}</li>
                             <li>{'Profit %: ' + product.percentProfit}</li>
-                            <li>{'Evaluation: ' + product.ourEval}</li>
                         </ul>
                     </div>
                 </div>
@@ -166,14 +175,14 @@ export default class SearchResults extends Component {
                                 </div>
                             </div>
                             <div className='col-3'>
-                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                <div className="card rounded-0 bg-info text-white text-center" style={{height : '100%'}}>
                                     <div className="card-block">
                                         <h4>Alibaba Analysis</h4>
                                     </div>
                                 </div>
                             </div>
                             <div className='col-3'>
-                                <div className="card rounded-0 bg-primary text-white text-center" style={{height : '100%'}}>
+                                <div className="card rounded-0 bg-info text-white text-center" style={{height : '100%'}}>
                                     <div className="card-block">
                                         <h4>Amazon Analysis</h4>
                                     </div>
