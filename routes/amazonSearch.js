@@ -31,7 +31,7 @@ function processAmazonResults(results) {
         var thisInfo = {
             name: result.ItemAttributes[0].Title[0],
             link: result.DetailPageURL[0],
-            price: result.OfferSummary[0].LowestNewPrice[0].Amount[0],
+            price: parseInt(result.OfferSummary[0].LowestNewPrice[0].Amount[0]),
             pic: result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0]
         }
 
@@ -107,11 +107,23 @@ router.get('/', function(req, res, next) {
 */
 
 
-    Promises.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
+    Promise.all([client.itemSearch({searchIndex: 'All', keywords: req.query.search, responseGroup: 'Medium', itemPage: 1}), axios.get('https://www.aliexpress.com/wholesale?SearchText='+req.query.search)])
         .then(function(values) {
             console.log(values);
+            //console.log('Made it');
+            //console.log(Object.keys(values));
 
-            res.send(values);
+            var amResult = values[0];
+            var aliResult = values[1].data;
+            var amReport = processAmazonResults(amResult);
+            var aliReport = ali.parseHTML(aliResult);
+
+            var finalReport = {
+                amReport: amReport,
+                aliReport: aliReport
+            }
+
+            res.send(finalReport);
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
