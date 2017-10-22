@@ -55,7 +55,7 @@ export default class Navbar extends Component {
     render() {
         var redirectionDiv = null;
         if (this.state.shouldRedirect) {
-            redirectionDiv = <Redirect from={this.props.parentUrl} to={'/search/' + this.state.search} />;
+            redirectionDiv = <Redirect from={this.props.parentUrl} to={'/search/' + encodeURIComponent(this.state.search)} />;
         }
         return(
             <div>

@@ -61,12 +61,23 @@ function parseHTML(html){
     //console.log(list1);
     //console.log(list2);
     var retList = list1.items.concat(list2.items);
+    if(retList.length == 0){
+        var report = {
+            aliStats: {},
+            aliInfo: []
+        }
+        console.log("here");
+        return report;
+    }
     var listFirstTen = retList.slice(0, 10);
+
     var mean = 0;
     var finalList = [];
 
     var max = 0;
     var min = Number.MAX_SAFE_INTEGER;
+
+
 
     listFirstTen.forEach(function(element) {
         var arr = element.price.match(/(\d[\d\.]*)/g);
@@ -79,6 +90,16 @@ function parseHTML(html){
         element.price = final;
         element.imageUrl = "https:" + element.imageUrl;
         element.itemUrl = "https:" + element.itemUrl;
+
+        var nameT = element.name;
+        if(nameT === undefined){
+            var itemUrlCopy = element.itemUrl;
+            var pos1 = itemUrlCopy.lastIndexOf('item/');
+            var pos2 = itemUrlCopy.indexOf('/', pos1+5);
+            itemUrlCopy = itemUrlCopy.substring(pos1+5, pos2);
+            itemUrlCopy = itemUrlCopy.replace(/-/g, ' ');
+            element.name = itemUrlCopy;
+        }
 
         var thisInfo = {
             name: element.name,
@@ -94,18 +115,26 @@ function parseHTML(html){
             min = thisInfo.price;
         }
 
+
         finalList.push(thisInfo);
 
     });
-    mean = mean/listFirstTen.length;
-    var tmpList = listFirstTen;
+    mean = mean/finalList.length;
+    var tmpList = finalList;
     var median = 0;
 
     tmpList.sort(function(a, b) {
             return parseFloat(a.price) - parseFloat(b.price);
     });
 
-    median = ( parseInt(tmpList[tmpList.length / 2].price) + parseInt(tmpList[(tmpList.length / 2) + 1].price)/2);
+    console.log(tmpList);
+    var halfIndex = Math.floor(tmpList.length/2);
+    if(tmpList.length % 2) {
+        median = parseInt(tmpList[halfIndex].price);
+    } else {
+        median = (parseInt(tmpList[halfIndex-1].price) + parseInt(tmpList[halfIndex].price)) / 2.0;
+    }
+
     var stats = {
         mean: mean,
         median: median,

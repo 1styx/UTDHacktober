@@ -22,7 +22,6 @@ function processAmazonResults(results) {
 
     var statMax = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
     var statMin = parseInt(results[0].OfferSummary[0].LowestNewPrice[0].Amount[0]) / 100;
-    //console.log('Starting max: ' + statMax + ', Starting min: ' + statMin);
 
     var stats = {
         mean: 0,
@@ -48,7 +47,7 @@ function processAmazonResults(results) {
             titleString = result.ItemAttributes[0].Title[0];
         }
 
-        console.log(result);
+        //console.log(result);
         var thisInfo = {
             name: titleString,
             link: result.DetailPageURL[0],
@@ -90,6 +89,7 @@ function processAmazonResults(results) {
         amInfo: retInfo
     }
 
+    console.log('end of amazon');
     return report;
 }
 
@@ -214,15 +214,15 @@ router.get('/', function(req, res, next) {
 
             var prodAnal = {
                 ali: {
-                    rawProfit: aliRawProfit.toFixed(2),
-                    percentProfit: aliPercentProfit.toFixed(2)
+                    rawProfit: aliRawProfit,
+                    percentProfit: aliPercentProfit
                 },
                 am: {
-                    rawProfit: amRawProfit.toFixed(2),
-                    percentProfit: amPercentProfit.toFixed(2)
+                    rawProfit: amRawProfit,
+                    percentProfit: amPercentProfit
                 },
-                totalMin: totalMin.toFixed(2),
-                totalMax: totalMax.toFixed(2),
+                totalMin: totalMin,
+                totalMax: totalMax,
                 searchTerm: req.query.search,
                 ourEval: ourEval
             }
@@ -237,7 +237,7 @@ router.get('/', function(req, res, next) {
         })
         .catch(function(error) {
             console.log('Promises erroring out: ' + error);
-            console.error(error.stack);
+            res.status(500).send('Could not access results at this time!');
         });
 
 
