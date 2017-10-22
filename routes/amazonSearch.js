@@ -37,7 +37,7 @@ function processAmazonResults(results) {
         console.log('Binding: ' + result.ItemAttributes[0].Binding + ' EAN: ' + result.ItemAttributes[0].EAN);
         */
 
-        var picUrl = '../public/images/No_image_available.svg';
+        var picUrl = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';
         if(typeof result.ImageSets !== 'undefined') {
             var picUrl = result.ImageSets[0].ImageSet[0].TinyImage[0].URL[0];
         }

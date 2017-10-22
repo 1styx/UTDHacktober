@@ -11,9 +11,9 @@ export default class Home extends Component {
                         Welcome to MotherShip!
                     </h2>
                     <p className='text-muted'>
-                    	We search the popular online shopping sites Amazon
-                    	and AliExpress to help you get the best prices for
-                    	everything you buy.
+                    	Bringing you all the insider information you need to set up your own
+                        online storefront, or just make informed decisions with your hard earned
+                        dollars.
                     </p>
                     <h4>
                     	AliExpress
@@ -21,27 +21,28 @@ export default class Home extends Component {
 
                     <ul>
                     	<li className='text-muted'>
-	                    	We were unable to access the API for AliExpress,
-	                    	so we scrape the site manually to gather price history
+                            We source all of our information straight from the pages
+                            of AliExpress.
+	                    	While we were unable to access the API for AliExpress on such short notice,
+	                    	we scrape the site manually to gather to-the-moment product data
 	                    	for the products in question.
 	                    </li>
+                        {/*
 	                    <li className='text-muted'>
 	                    	* Explain how the algorithm works for
 	                    	the AliExpress data *
 	                    </li>
+                        */}
                     </ul>
                     <h4>
                     	Amazon
                     </h4>
                     <ul>
                     	<li className='text-muted'>
-	                    	We used the API available through AWS to gather price history
-	                    	from Amazon for the products in question.
+	                    	We make use of the Amazon Product Advertiser API available through AWS
+                            to gather product information from Amazon for every query.
 	                    </li>
-	                    <li className='text-muted'>
-	                    	* Explain how the algorithm works for
-	                    	the Amazon data *
-	                    </li>
+
                     </ul>
                 </div>
             </div>
