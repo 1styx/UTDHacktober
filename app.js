@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongojs = require('mongojs');
-var connectionString = "mongodb://nazdevwilson:audrey371000@hobbysite-shard-00-00-uzg5h.mongodb.net:27017,hobbysite-shard-00-01-uzg5h.mongodb.net:27017,hobbysite-shard-00-02-uzg5h.mongodb.net:27017/hackathon?ssl=true&replicaSet=HobbySite-shard-0&authSource=admin";
+var connectionString = "mongodb://@hobbysite-shard-00-00-uzg5h.mongodb.net:27017,hobbysite-shard-00-01-uzg5h.mongodb.net:27017,hobbysite-shard-00-02-uzg5h.mongodb.net:27017/hackathon?ssl=true&replicaSet=HobbySite-shard-0&authSource=admin";
 var db = mongojs(connectionString, ['searches']);
 var ObjectId = mongojs.ObjectId;
 
